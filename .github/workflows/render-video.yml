@@ -61,7 +61,7 @@ jobs:
             --write-media out/voice-raw.mp3
 
           ffmpeg -y -i out/voice-raw.mp3 \
-            -af "atempo=1.04,highpass=f=90,lowpass=f=9500,acompressor=threshold=0.09:ratio=3:attack=10:release=160,volume=1.35,adelay=350|350,afade=t=out:st=17.55:d=0.65,apad,atrim=0:18.3" \
+            -af "atempo=1.18,highpass=f=90,lowpass=f=9500,acompressor=threshold=0.09:ratio=3:attack=10:release=160,volume=1.35,adelay=350|350,apad,atrim=0:18.3" \
             out/voice.wav
 
       - name: Mix narration with music and sound effects
@@ -69,7 +69,7 @@ jobs:
           ffmpeg -y \
             -i out/soundbed.wav \
             -i out/voice.wav \
-            -filter_complex "[0:a]volume=0.78[music];[1:a]volume=1.0[voice];[music][voice]sidechaincompress=threshold=0.035:ratio=7:attack=10:release=260[ducked];[ducked][voice]amix=inputs=2:normalize=0,alimiter=limit=0.94,afade=t=out:st=17.85:d=0.45[aout]" \
+            -filter_complex "[0:a]volume=0.78[music];[1:a]volume=1.0,asplit=2[voice_sc][voice_mix];[music][voice_sc]sidechaincompress=threshold=0.035:ratio=7:attack=10:release=260[ducked];[ducked][voice_mix]amix=inputs=2:normalize=0,alimiter=limit=0.94,afade=t=out:st=17.85:d=0.45[aout]" \
             -map "[aout]" -c:a pcm_s16le out/final-audio.wav
 
       - name: Assemble final MP4
