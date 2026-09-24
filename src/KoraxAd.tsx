@@ -2,6 +2,7 @@ import React from 'react';
 import {
   AbsoluteFill,
   Img,
+  Easing,
   interpolate,
   spring,
   useCurrentFrame,
@@ -9,852 +10,570 @@ import {
 } from 'remotion';
 import {KORAX_LOGO_DATA_URL} from './logoData';
 
-const clamp = {
-  extrapolateLeft: 'clamp' as const,
-  extrapolateRight: 'clamp' as const,
+const C = {
+  bg: '#020717',
+  navy: '#04113a',
+  blue: '#075cff',
+  cyan: '#12b8ff',
+  white: '#f7fbff',
+  muted: '#91a6d6',
+  red: '#ff4d67',
+  green: '#25d366',
+  card: '#071433',
 };
 
-const BLUE = '#0057FF';
-const CYAN = '#16C7FF';
-const NAVY = '#010B36';
-const WHITE = '#F7FAFF';
-const MUTED = '#94A7C7';
-
-const reveal = (frame: number, start: number, duration = 18) =>
-  interpolate(frame, [start, start + duration], [0, 1], clamp);
-
-const sceneOpacity = (
-  frame: number,
-  start: number,
-  end: number,
-  fade = 12,
-) =>
-  interpolate(
-    frame,
-    [start, start + fade, end - fade, end],
-    [0, 1, 1, 0],
-    clamp,
-  );
-
-const GlowOrb: React.FC<{
-  size: number;
-  left: number;
-  top: number;
-  opacity: number;
-  drift: number;
-}> = ({size, left, top, opacity, drift}) => {
-  const frame = useCurrentFrame();
-  const x = Math.sin(frame / 38 + drift) * 36;
-  const y = Math.cos(frame / 46 + drift) * 34;
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        width: size,
-        height: size,
-        left: left + x,
-        top: top + y,
-        borderRadius: '50%',
-        background: `radial-gradient(circle, rgba(0,87,255,${opacity}) 0%, rgba(0,87,255,0) 72%)`,
-        filter: 'blur(8px)',
-      }}
-    />
-  );
-};
+const clamp = (v: number) => Math.max(0, Math.min(1, v));
+const local = (frame: number, start: number, end: number) => clamp((frame - start) / (end - start));
+const ease = (v: number) => Easing.bezier(0.18, 0.88, 0.28, 1)(clamp(v));
 
 const Background: React.FC = () => {
   const frame = useCurrentFrame();
-  const scanY = (frame * 5) % 2100 - 100;
+  const x = 50 + Math.sin(frame / 70) * 18;
+  const y = 28 + Math.cos(frame / 90) * 12;
   return (
     <AbsoluteFill
       style={{
-        overflow: 'hidden',
         background:
-          'radial-gradient(circle at 70% 20%, #072661 0%, #010B36 35%, #020713 70%, #010309 100%)',
+          `radial-gradient(circle at ${x}% ${y}%, rgba(0,95,255,.34), transparent 34%), ` +
+          `radial-gradient(circle at 85% 78%, rgba(0,184,255,.16), transparent 28%), ` +
+          `linear-gradient(180deg, #020717 0%, #02091e 44%, #01040d 100%)`,
+        overflow: 'hidden',
       }}
     >
-      <GlowOrb size={900} left={420} top={-300} opacity={0.28} drift={0.2} />
-      <GlowOrb size={760} left={-280} top={1030} opacity={0.2} drift={2.1} />
-      <GlowOrb size={680} left={550} top={1120} opacity={0.16} drift={4.4} />
-
+      {[0, 1, 2, 3, 4].map((i) => {
+        const top = 140 + i * 360 + ((frame * (0.7 + i * 0.08)) % 360);
+        return (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: -180,
+              top: top - 360,
+              width: 1450,
+              height: 1,
+              background: 'linear-gradient(90deg, transparent, rgba(50,123,255,.22), transparent)',
+              transform: 'rotate(-12deg)',
+            }}
+          />
+        );
+      })}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          opacity: 0.16,
+          opacity: 0.12,
           backgroundImage:
-            'linear-gradient(rgba(66,132,255,.16) 1px, transparent 1px), linear-gradient(90deg, rgba(66,132,255,.13) 1px, transparent 1px)',
-          backgroundSize: '72px 72px',
-          transform: `perspective(900px) rotateX(62deg) scale(1.55) translateY(${120 + frame * 0.7}px)`,
-          transformOrigin: '50% 100%',
-        }}
-      />
-
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: scanY,
-          height: 3,
-          background:
-            'linear-gradient(90deg, transparent, rgba(22,199,255,.9), transparent)',
-          boxShadow: '0 0 28px rgba(22,199,255,.8)',
-          opacity: 0.42,
-        }}
-      />
-
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background:
-            'linear-gradient(180deg, rgba(0,0,0,.12), transparent 30%, rgba(0,0,0,.38) 100%)',
+            'linear-gradient(rgba(80,130,255,.25) 1px, transparent 1px), linear-gradient(90deg, rgba(80,130,255,.25) 1px, transparent 1px)',
+          backgroundSize: '76px 76px',
+          transform: `translateY(${(frame * 0.35) % 76}px)`,
+          maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)',
         }}
       />
     </AbsoluteFill>
   );
 };
 
-const Notification: React.FC<{
-  delay: number;
-  x: number;
-  y: number;
-  width: number;
-  text: string;
-  sub: string;
-  side?: 'left' | 'right';
-}> = ({delay, x, y, width, text, sub, side = 'left'}) => {
-  const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
-  const p = spring({
-    fps,
-    frame: frame - delay,
-    config: {damping: 13, stiffness: 130, mass: 0.8},
-  });
-  const exit = interpolate(frame, [82, 102], [1, 0], clamp);
-  const slide = interpolate(p, [0, 1], [side === 'left' ? -180 : 180, 0]);
-  const rotate = interpolate(p, [0, 1], [side === 'left' ? -5 : 5, 0]);
-
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        left: x,
-        top: y,
-        width,
-        opacity: p * exit,
-        transform: `translateX(${slide}px) scale(${0.9 + p * 0.1}) rotate(${rotate}deg)`,
-        border: '1px solid rgba(72,159,255,.42)',
-        borderRadius: 28,
-        padding: '22px 24px',
-        background:
-          'linear-gradient(135deg, rgba(9,28,68,.96), rgba(4,13,35,.91))',
-        boxShadow:
-          '0 24px 70px rgba(0,0,0,.4), inset 0 0 35px rgba(0,87,255,.08)',
-        backdropFilter: 'blur(18px)',
-      }}
-    >
-      <div style={{display: 'flex', alignItems: 'center', gap: 16}}>
-        <div
-          style={{
-            width: 52,
-            height: 52,
-            borderRadius: 17,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'linear-gradient(145deg, #23D366, #0EA847)',
-            color: 'white',
-            fontSize: 26,
-            fontWeight: 900,
-            boxShadow: '0 0 24px rgba(35,211,102,.32)',
-          }}
-        >
-          ●
-        </div>
-        <div style={{flex: 1}}>
-          <div
-            style={{
-              color: WHITE,
-              fontSize: 28,
-              fontWeight: 800,
-              letterSpacing: -0.5,
-            }}
-          >
-            {text}
-          </div>
-          <div style={{color: MUTED, marginTop: 6, fontSize: 20}}>{sub}</div>
-        </div>
-        <div
-          style={{
-            width: 34,
-            height: 34,
-            borderRadius: 17,
-            background: '#0C5EFF',
-            color: 'white',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 900,
-            fontSize: 18,
-          }}
-        >
-          1
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const LogoBadge: React.FC<{size?: number}> = ({size = 220}) => (
+const Kicker: React.FC<{children: React.ReactNode; accent?: string}> = ({children, accent = C.cyan}) => (
   <div
     style={{
-      width: size,
-      height: size,
-      borderRadius: size / 2,
-      overflow: 'hidden',
-      boxShadow:
-        '0 0 0 1px rgba(80,163,255,.3), 0 0 55px rgba(0,87,255,.42), 0 28px 80px rgba(0,0,0,.5)',
+      color: accent,
+      fontSize: 24,
+      fontWeight: 800,
+      letterSpacing: 5,
+      textTransform: 'uppercase',
+      marginBottom: 20,
     }}
   >
-    <Img
-      src={KORAX_LOGO_DATA_URL}
-      style={{width: '100%', height: '100%', objectFit: 'cover'}}
-    />
+    {children}
   </div>
 );
 
-const FeatureCard: React.FC<{
+const ChatBubble: React.FC<{
+  text: string;
+  top: number;
+  side: 'left' | 'right';
   delay: number;
-  x: number;
-  y: number;
-  title: string;
-  caption: string;
-  code: string;
-}> = ({delay, x, y, title, caption, code}) => {
+  bad?: boolean;
+}> = ({text, top, side, delay, bad}) => {
   const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
-  const p = spring({fps, frame: frame - delay, config: {damping: 15, stiffness: 120}});
+  const p = ease(local(frame, delay, delay + 14));
+  const x = (1 - p) * (side === 'left' ? -460 : 460);
+  const rotate = (1 - p) * (side === 'left' ? -4 : 4);
   return (
     <div
       style={{
         position: 'absolute',
-        left: x,
-        top: y,
-        width: 450,
-        height: 162,
-        padding: '28px 30px',
+        top,
+        [side]: 54,
+        width: 690,
+        padding: '24px 28px',
+        borderRadius: 22,
+        background: bad ? 'rgba(255,77,103,.10)' : 'rgba(7,20,51,.95)',
+        border: `1px solid ${bad ? 'rgba(255,77,103,.38)' : 'rgba(70,130,255,.28)'}`,
+        boxShadow: '0 20px 50px rgba(0,0,0,.28)',
+        transform: `translateX(${x}px) rotate(${rotate}deg) scale(${0.86 + p * 0.14})`,
+        opacity: p,
         display: 'flex',
         alignItems: 'center',
-        gap: 24,
-        borderRadius: 30,
-        border: '1px solid rgba(74,151,255,.35)',
-        background:
-          'linear-gradient(135deg, rgba(10,34,82,.9), rgba(3,13,34,.93))',
-        boxShadow: '0 24px 65px rgba(0,0,0,.32)',
-        opacity: p,
-        transform: `translateY(${interpolate(p, [0, 1], [50, 0])}px) scale(${0.94 + p * 0.06})`,
+        gap: 18,
       }}
     >
       <div
         style={{
-          width: 92,
-          height: 92,
-          borderRadius: 27,
-          background: 'linear-gradient(145deg, #0C59FF, #12C6FF)',
+          width: 42,
+          height: 42,
+          borderRadius: 13,
+          background: bad ? C.red : C.green,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: WHITE,
           fontWeight: 900,
-          fontSize: code.length > 2 ? 25 : 38,
-          boxShadow: '0 0 34px rgba(0,113,255,.36)',
+          color: 'white',
+          flex: '0 0 auto',
         }}
       >
-        {code}
+        {bad ? '!' : '•'}
+      </div>
+      <div style={{color: C.white, fontSize: 31, fontWeight: 700, lineHeight: 1.15}}>{text}</div>
+    </div>
+  );
+};
+
+const Hook: React.FC = () => {
+  const frame = useCurrentFrame();
+  const p = ease(local(frame, 0, 18));
+  const p2 = ease(local(frame, 66, 92));
+  return (
+    <AbsoluteFill style={{fontFamily: 'Inter, Arial, sans-serif'}}>
+      <ChatBubble text="Qual o valor?" top={180} side="left" delay={3} />
+      <ChatBubble text="Tem horário hoje?" top={318} side="right" delay={15} />
+      <ChatBubble text="Quero agendar" top={456} side="left" delay={27} />
+      <ChatBubble text="Vocês atendem sábado?" top={594} side="right" delay={39} />
+      <div
+        style={{
+          position: 'absolute',
+          left: 58,
+          right: 58,
+          bottom: 170,
+          transform: `translateY(${(1 - p) * 120}px) scale(${0.9 + p * 0.1})`,
+          opacity: p,
+        }}
+      >
+        <Kicker>Se você já tentou IA no WhatsApp</Kicker>
+        <div style={{color: C.white, fontSize: 92, fontWeight: 950, lineHeight: 0.92, letterSpacing: -4}}>
+          E SE
+          <br />
+          <span style={{color: C.red}}>ARREPENDEU?</span>
+        </div>
+        <div
+          style={{
+            marginTop: 30,
+            color: C.muted,
+            fontSize: 31,
+            lineHeight: 1.25,
+            maxWidth: 820,
+            opacity: p2,
+            transform: `translateX(${(1 - p2) * 60}px)`,
+          }}
+        >
+          Talvez o problema nunca tenha sido usar IA.
+        </div>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+const PainCard: React.FC<{title: string; subtitle: string; y: number; delay: number; index: number}> = ({
+  title,
+  subtitle,
+  y,
+  delay,
+  index,
+}) => {
+  const frame = useCurrentFrame();
+  const p = ease(local(frame, delay, delay + 14));
+  const flash = interpolate(Math.sin((frame - delay) / 5), [-1, 1], [0.7, 1]);
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: 64,
+        right: 64,
+        top: y,
+        height: 250,
+        borderRadius: 30,
+        padding: 30,
+        background: 'linear-gradient(135deg, rgba(255,77,103,.12), rgba(7,20,51,.92))',
+        border: '1px solid rgba(255,77,103,.34)',
+        transform: `translateX(${(1 - p) * (index % 2 === 0 ? -520 : 520)}px) scale(${0.9 + p * 0.1})`,
+        opacity: p,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 28,
+      }}
+    >
+      <div
+        style={{
+          width: 94,
+          height: 94,
+          borderRadius: 28,
+          background: `rgba(255,77,103,${0.12 * flash})`,
+          border: '2px solid rgba(255,77,103,.55)',
+          color: C.red,
+          fontSize: 46,
+          fontWeight: 950,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        ×
       </div>
       <div>
-        <div style={{color: WHITE, fontSize: 31, fontWeight: 900}}>{title}</div>
-        <div style={{color: MUTED, fontSize: 21, marginTop: 7, lineHeight: 1.25}}>
-          {caption}
-        </div>
+        <div style={{color: C.white, fontSize: 45, fontWeight: 950, letterSpacing: -1.5}}>{title}</div>
+        <div style={{color: C.muted, fontSize: 28, marginTop: 9, lineHeight: 1.18}}>{subtitle}</div>
       </div>
     </div>
   );
 };
 
-const SceneOne: React.FC = () => {
+const Pain: React.FC = () => {
   const frame = useCurrentFrame();
-  const opacity = sceneOpacity(frame, 0, 108, 10);
-  const titleIn = reveal(frame, 15, 20);
-  const titleY = interpolate(titleIn, [0, 1], [60, 0]);
-  const pulse = 1 + Math.sin(frame / 7) * 0.012;
-
+  const title = ease(local(frame, 98, 116));
   return (
-    <div style={{position: 'absolute', inset: 0, opacity}}>
-      <Notification delay={1} x={64} y={220} width={660} text="Oi, vocês atendem hoje?" sub="Novo cliente • agora" />
-      <Notification delay={10} x={344} y={410} width={670} text="Quero saber o valor" sub="Novo cliente • agora" side="right" />
-      <Notification delay={20} x={82} y={620} width={700} text="Tem horário amanhã?" sub="Novo cliente • agora" />
-      <Notification delay={32} x={306} y={825} width={700} text="Posso agendar uma avaliação?" sub="Novo cliente • agora" side="right" />
-      <Notification delay={44} x={78} y={1030} width={650} text="Vocês atendem sábado?" sub="Novo cliente • agora" />
-
-      <div
-        style={{
-          position: 'absolute',
-          left: 70,
-          right: 70,
-          bottom: 205,
-          opacity: titleIn,
-          transform: `translateY(${titleY}px) scale(${pulse})`,
-        }}
-      >
-        <div
-          style={{
-            color: '#6AA8FF',
-            fontSize: 28,
-            fontWeight: 800,
-            textTransform: 'uppercase',
-            letterSpacing: 6,
-            marginBottom: 18,
-          }}
-        >
-          TODO DIA É ASSIM?
-        </div>
-        <div
-          style={{
-            color: WHITE,
-            fontSize: 84,
-            fontWeight: 950,
-            lineHeight: 0.98,
-            letterSpacing: -4.2,
-          }}
-        >
-          SEU WHATSAPP
+    <AbsoluteFill style={{fontFamily: 'Inter, Arial, sans-serif'}}>
+      <div style={{position: 'absolute', top: 115, left: 64, opacity: title, transform: `translateY(${(1-title)*40}px)`}}>
+        <Kicker accent={C.red}>Foi isso que aconteceu?</Kicker>
+        <div style={{color: C.white, fontWeight: 950, fontSize: 66, lineHeight: 0.98, letterSpacing: -3}}>
+          A IA COMEÇAVA BEM.
           <br />
-          <span
-            style={{
-              background: 'linear-gradient(90deg, #19CBFF, #0861FF)',
-              WebkitBackgroundClip: 'text',
-              color: 'transparent',
-            }}
-          >
-            NÃO PARA?
-          </span>
+          <span style={{color: C.red}}>DEPOIS SE PERDIA.</span>
         </div>
       </div>
-    </div>
-  );
-};
-
-const SceneTwo: React.FC = () => {
-  const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
-  const opacity = sceneOpacity(frame, 92, 205, 14);
-  const logoSpring = spring({
-    fps,
-    frame: frame - 105,
-    config: {damping: 12, stiffness: 95, mass: 0.85},
-  });
-  const ring = interpolate(frame, [105, 190], [0.68, 1.5], clamp);
-  const ringOpacity = interpolate(frame, [105, 135, 190], [0, 0.7, 0], clamp);
-  const copyIn = reveal(frame, 126, 22);
-
-  return (
-    <div style={{position: 'absolute', inset: 0, opacity}}>
+      <PainCard index={0} title="RESPOSTAS ENGESSADAS" subtitle="Fala bonito, mas não conduz a conversa." y={465} delay={118} />
+      <PainCard index={1} title="IGNORA O PROCESSO" subtitle="Pula etapas e não respeita seu comercial." y={755} delay={144} />
+      <PainCard index={2} title="PERDE O TREINAMENTO" subtitle="Depois de algumas mensagens, sai do caminho." y={1045} delay={170} />
       <div
         style={{
           position: 'absolute',
-          left: '50%',
-          top: 380,
-          width: 420,
-          height: 420,
-          marginLeft: -210,
-          borderRadius: '50%',
-          border: '2px solid rgba(22,199,255,.7)',
-          opacity: ringOpacity,
-          transform: `scale(${ring})`,
-          boxShadow: '0 0 90px rgba(0,87,255,.2)',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: 445,
-          transform: `translateX(-50%) scale(${0.68 + logoSpring * 0.32}) rotate(${interpolate(
-            logoSpring,
-            [0, 1],
-            [-8, 0],
-          )}deg)`,
-          opacity: logoSpring,
-        }}
-      >
-        <LogoBadge size={300} />
-      </div>
-
-      <div
-        style={{
-          position: 'absolute',
-          left: 70,
-          right: 70,
-          top: 880,
-          textAlign: 'center',
-          opacity: copyIn,
-          transform: `translateY(${interpolate(copyIn, [0, 1], [42, 0])}px)`,
-        }}
-      >
-        <div
-          style={{
-            color: CYAN,
-            fontSize: 29,
-            letterSpacing: 7,
-            fontWeight: 850,
-            textTransform: 'uppercase',
-          }}
-        >
-          CHEGOU A KORAX
-        </div>
-        <div
-          style={{
-            color: WHITE,
-            fontSize: 82,
-            lineHeight: 1.02,
-            fontWeight: 950,
-            letterSpacing: -4.2,
-            marginTop: 22,
-          }}
-        >
-          DEIXE A IA
-          <br />
-          <span style={{color: '#4196FF'}}>FAZER O PRIMEIRO ATENDIMENTO.</span>
-        </div>
-        <div
-          style={{
-            color: MUTED,
-            fontSize: 28,
-            lineHeight: 1.35,
-            marginTop: 30,
-            maxWidth: 820,
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}
-        >
-          Responde, entende a necessidade e conduz cada conversa até o próximo passo.
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const SceneThree: React.FC = () => {
-  const frame = useCurrentFrame();
-  const opacity = sceneOpacity(frame, 184, 318, 12);
-  const phoneIn = reveal(frame, 196, 24);
-  const reply1 = reveal(frame, 220, 12);
-  const reply2 = reveal(frame, 245, 12);
-  const reply3 = reveal(frame, 270, 12);
-
-  return (
-    <div style={{position: 'absolute', inset: 0, opacity}}>
-      <div
-        style={{
-          position: 'absolute',
+          bottom: 145,
           left: 64,
-          top: 165,
-          color: WHITE,
-        }}
-      >
-        <div style={{color: CYAN, fontSize: 27, fontWeight: 900, letterSpacing: 6}}>
-          80% DO CAMINHO
-        </div>
-        <div
-          style={{
-            fontSize: 78,
-            fontWeight: 950,
-            lineHeight: 1,
-            letterSpacing: -3.7,
-            marginTop: 16,
-          }}
-        >
-          ELA ATENDE.
-          <br />
-          ELA QUALIFICA.
-          <br />
-          <span style={{color: '#3D94FF'}}>ELA AGENDA.</span>
-        </div>
-      </div>
-
-      <FeatureCard delay={205} x={55} y={620} code="24H" title="ATENDE" caption="Responde mesmo fora do horário." />
-      <FeatureCard delay={222} x={55} y={805} code="✓" title="QUALIFICA" caption="Entende interesse e prioridade." />
-      <FeatureCard delay={239} x={55} y={990} code="CAL" title="AGENDA" caption="Conduz até a confirmação." />
-
-      <div
-        style={{
-          position: 'absolute',
-          right: 46,
-          top: 610,
-          width: 500,
-          height: 880,
-          borderRadius: 62,
-          border: '2px solid rgba(83,158,255,.45)',
-          background:
-            'linear-gradient(180deg, rgba(5,19,52,.96), rgba(2,8,23,.98))',
-          boxShadow:
-            '0 40px 120px rgba(0,0,0,.48), 0 0 80px rgba(0,87,255,.16)',
-          padding: 28,
-          opacity: phoneIn,
-          transform: `translateX(${interpolate(phoneIn, [0, 1], [90, 0])}px) rotate(${interpolate(
-            phoneIn,
-            [0, 1],
-            [4, 0],
-          )}deg)`,
+          right: 64,
+          height: 8,
+          borderRadius: 10,
+          background: 'rgba(255,255,255,.06)',
+          overflow: 'hidden',
         }}
       >
         <div
           style={{
-            height: 76,
-            borderBottom: '1px solid rgba(91,158,255,.18)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 14,
+            height: '100%',
+            width: `${Math.min(100, Math.max(0, ((frame - 112) / 110) * 100))}%`,
+            background: `linear-gradient(90deg, ${C.red}, #ff9a7a)`,
           }}
-        >
-          <LogoBadge size={54} />
-          <div>
-            <div style={{color: WHITE, fontSize: 24, fontWeight: 900}}>Korax IA</div>
-            <div style={{color: '#4DFF9A', fontSize: 16, marginTop: 2}}>● online agora</div>
-          </div>
-        </div>
-
-        <div style={{marginTop: 28}}>
-          <div
-            style={{
-              marginLeft: 70,
-              borderRadius: '24px 24px 6px 24px',
-              padding: '20px 22px',
-              color: WHITE,
-              fontSize: 22,
-              lineHeight: 1.3,
-              background: 'rgba(35,211,102,.16)',
-              border: '1px solid rgba(35,211,102,.2)',
-            }}
-          >
-            Oi! Queria marcar uma avaliação amanhã.
-          </div>
-
-          <div
-            style={{
-              marginTop: 22,
-              marginRight: 45,
-              borderRadius: '24px 24px 24px 6px',
-              padding: '20px 22px',
-              color: WHITE,
-              fontSize: 22,
-              lineHeight: 1.3,
-              background: 'rgba(0,87,255,.2)',
-              border: '1px solid rgba(80,155,255,.3)',
-              opacity: reply1,
-              transform: `translateY(${interpolate(reply1, [0, 1], [22, 0])}px)`,
-            }}
-          >
-            Claro. Para eu te direcionar certinho: qual serviço você procura?
-          </div>
-
-          <div
-            style={{
-              marginTop: 22,
-              marginLeft: 126,
-              borderRadius: '24px 24px 6px 24px',
-              padding: '18px 22px',
-              color: WHITE,
-              fontSize: 22,
-              background: 'rgba(35,211,102,.16)',
-              border: '1px solid rgba(35,211,102,.2)',
-              opacity: reply2,
-            }}
-          >
-            Avaliação inicial.
-          </div>
-
-          <div
-            style={{
-              marginTop: 22,
-              marginRight: 30,
-              borderRadius: '24px 24px 24px 6px',
-              padding: '20px 22px',
-              color: WHITE,
-              fontSize: 22,
-              lineHeight: 1.3,
-              background: 'rgba(0,87,255,.22)',
-              border: '1px solid rgba(80,155,255,.32)',
-              opacity: reply3,
-              transform: `translateY(${interpolate(reply3, [0, 1], [18, 0])}px)`,
-            }}
-          >
-            Perfeito. Tenho 14h ou 16h. Qual horário fica melhor para você?
-          </div>
-        </div>
+        />
       </div>
-    </div>
+    </AbsoluteFill>
   );
 };
 
-const SceneFour: React.FC = () => {
+const Reframe: React.FC = () => {
   const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
-  const opacity = sceneOpacity(frame, 298, 392, 11);
-  const card = spring({fps, frame: frame - 310, config: {damping: 13, stiffness: 105}});
-  const check = spring({fps, frame: frame - 336, config: {damping: 11, stiffness: 150}});
-
+  const p1 = ease(local(frame, 228, 247));
+  const p2 = ease(local(frame, 258, 282));
+  const p3 = ease(local(frame, 286, 308));
   return (
-    <div style={{position: 'absolute', inset: 0, opacity}}>
-      <div
-        style={{
-          position: 'absolute',
-          left: 72,
-          right: 72,
-          top: 235,
-          textAlign: 'center',
-        }}
-      >
-        <div style={{color: CYAN, fontSize: 28, fontWeight: 900, letterSpacing: 6}}>
-          PRÓXIMO PASSO
-        </div>
-        <div
-          style={{
-            color: WHITE,
-            fontSize: 82,
-            lineHeight: 1.02,
-            fontWeight: 950,
-            letterSpacing: -4,
-            marginTop: 20,
-          }}
-        >
-          O CLIENTE JÁ CHEGA
+    <AbsoluteFill style={{fontFamily: 'Inter, Arial, sans-serif', justifyContent: 'center', padding: '0 62px'}}>
+      <div style={{opacity: p1, transform: `translateY(${(1-p1)*80}px)`}}>
+        <Kicker>O ponto é outro</Kicker>
+        <div style={{color: C.white, fontSize: 84, fontWeight: 950, lineHeight: 0.93, letterSpacing: -4}}>
+          O PROBLEMA
           <br />
-          <span style={{color: '#4196FF'}}>COM O CAMINHO ANDADO.</span>
+          <span style={{color: C.cyan}}>NÃO É A IA.</span>
         </div>
       </div>
-
       <div
         style={{
-          position: 'absolute',
-          left: 95,
-          right: 95,
-          top: 720,
-          height: 610,
-          borderRadius: 48,
-          padding: 50,
-          background:
-            'linear-gradient(145deg, rgba(11,38,92,.96), rgba(3,12,32,.98))',
-          border: '1px solid rgba(86,163,255,.45)',
-          boxShadow:
-            '0 45px 120px rgba(0,0,0,.42), inset 0 0 70px rgba(0,87,255,.07)',
-          opacity: card,
-          transform: `translateY(${interpolate(card, [0, 1], [80, 0])}px) scale(${0.92 + card * 0.08})`,
+          marginTop: 48,
+          opacity: p2,
+          transform: `translateX(${(1-p2)*100}px)`,
+          color: C.muted,
+          fontSize: 37,
+          fontWeight: 700,
+          lineHeight: 1.18,
         }}
       >
-        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <div>
-            <div style={{color: MUTED, fontSize: 23, letterSpacing: 3, fontWeight: 800}}>
-              AGENDAMENTO
-            </div>
-            <div style={{color: WHITE, fontSize: 46, fontWeight: 950, marginTop: 10}}>
-              Avaliação inicial
-            </div>
-          </div>
-          <div
-            style={{
-              width: 112,
-              height: 112,
-              borderRadius: 56,
-              background: 'linear-gradient(145deg, #15C971, #0B8D4B)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontSize: 58,
-              fontWeight: 900,
-              transform: `scale(${check}) rotate(${interpolate(check, [0, 1], [-20, 0])}deg)`,
-              boxShadow: '0 0 52px rgba(21,201,113,.3)',
-            }}
-          >
-            ✓
-          </div>
-        </div>
-
-        <div
-          style={{
-            marginTop: 46,
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 20,
-          }}
-        >
-          {[
-            ['DATA', '25 SET'],
-            ['HORÁRIO', '14:00'],
-            ['STATUS', 'CONFIRMADO'],
-            ['ORIGEM', 'KORAX IA'],
-          ].map(([label, value]) => (
-            <div
-              key={label}
-              style={{
-                borderRadius: 26,
-                padding: '24px 26px',
-                background: 'rgba(255,255,255,.035)',
-                border: '1px solid rgba(111,170,255,.14)',
-              }}
-            >
-              <div style={{color: MUTED, fontSize: 18, fontWeight: 800, letterSpacing: 2.5}}>
-                {label}
-              </div>
-              <div style={{color: WHITE, fontSize: 30, fontWeight: 900, marginTop: 8}}>
-                {value}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div
-          style={{
-            marginTop: 36,
-            paddingTop: 30,
-            borderTop: '1px solid rgba(91,158,255,.18)',
-            color: '#63A8FF',
-            fontSize: 25,
-            fontWeight: 850,
-            textAlign: 'center',
-          }}
-        >
-          ✓ Cliente qualificado · ✓ Horário definido · ✓ Confirmação enviada
-        </div>
+        É usar uma IA que não entende
+        <br />
+        <span style={{color: C.white, fontSize: 49}}>como a sua operação vende.</span>
       </div>
-    </div>
+      <div
+        style={{
+          marginTop: 42,
+          height: 84,
+          borderRadius: 20,
+          background: `linear-gradient(90deg, rgba(7,92,255,.14), rgba(18,184,255,.14))`,
+          border: '1px solid rgba(18,184,255,.28)',
+          display: 'flex',
+          alignItems: 'center',
+          padding: '0 28px',
+          color: C.cyan,
+          fontSize: 30,
+          fontWeight: 900,
+          letterSpacing: 1,
+          opacity: p3,
+          transform: `scaleX(${0.7 + p3 * 0.3})`,
+          transformOrigin: 'left center',
+        }}
+      >
+        IA PRECISA ENTENDER PROCESSO + CONTEXTO + MOMENTO
+      </div>
+    </AbsoluteFill>
   );
 };
 
-const SceneFive: React.FC = () => {
+const Reveal: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const opacity = interpolate(frame, [370, 390, 450], [0, 1, 1], clamp);
-  const logo = spring({fps, frame: frame - 382, config: {damping: 12, stiffness: 115}});
-  const copy = reveal(frame, 398, 20);
-  const cta = spring({fps, frame: frame - 416, config: {damping: 14, stiffness: 125}});
-  const glow = 0.72 + Math.sin(frame / 5) * 0.22;
-
+  const s = spring({frame: frame - 316, fps, config: {damping: 12, stiffness: 110, mass: 0.8}});
+  const p = ease(local(frame, 330, 356));
   return (
-    <div style={{position: 'absolute', inset: 0, opacity}}>
-      <div
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: 240,
-          transform: `translateX(-50%) scale(${0.7 + logo * 0.3})`,
-          opacity: logo,
-        }}
-      >
-        <LogoBadge size={270} />
-      </div>
-
-      <div
-        style={{
-          position: 'absolute',
-          left: 65,
-          right: 65,
-          top: 600,
-          textAlign: 'center',
-          opacity: copy,
-          transform: `translateY(${interpolate(copy, [0, 1], [45, 0])}px)`,
-        }}
-      >
+    <AbsoluteFill style={{fontFamily: 'Inter, Arial, sans-serif', alignItems: 'center', justifyContent: 'center'}}>
+      {[0, 1, 2].map((i) => (
         <div
+          key={i}
           style={{
-            color: WHITE,
-            fontSize: 92,
-            lineHeight: 0.98,
-            fontWeight: 950,
-            letterSpacing: -5,
+            position: 'absolute',
+            width: 360 + i * 180,
+            height: 360 + i * 180,
+            borderRadius: '50%',
+            border: '1px solid rgba(18,184,255,.16)',
+            transform: `scale(${0.86 + s * 0.14}) rotate(${frame * (0.1 + i * 0.04)}deg)`,
           }}
-        >
-          MAIS RESPOSTAS.
-          <br />
-          MAIS AGENDAMENTOS.
-          <br />
-          <span
-            style={{
-              background: 'linear-gradient(90deg, #1DCBFF, #0A63FF)',
-              WebkitBackgroundClip: 'text',
-              color: 'transparent',
-            }}
-          >
-            MAIS VENDAS.
-          </span>
-        </div>
-        <div style={{color: MUTED, fontSize: 30, marginTop: 34, lineHeight: 1.4}}>
-          Tenha um agente de IA atendendo e agendando por você.
-        </div>
+        />
+      ))}
+      <div style={{transform: `scale(${0.35 + s * 0.65})`, opacity: clamp(s), filter: 'drop-shadow(0 0 55px rgba(0,110,255,.7))'}}>
+        <Img src={KORAX_LOGO_DATA_URL} style={{width: 340, height: 340}} />
       </div>
-
       <div
         style={{
           position: 'absolute',
-          left: 80,
-          right: 80,
-          bottom: 260,
-          height: 170,
-          borderRadius: 42,
+          top: 1210,
+          textAlign: 'center',
+          opacity: p,
+          transform: `translateY(${(1-p)*45}px)`,
+        }}
+      >
+        <Kicker>Conheça a</Kicker>
+        <div style={{fontSize: 92, color: C.white, fontWeight: 950, letterSpacing: 8}}>KORAX</div>
+        <div style={{fontSize: 30, color: C.muted, marginTop: 10}}>IA que respeita o seu processo comercial.</div>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+const FlowNode: React.FC<{label: string; sub: string; y: number; index: number; active: number}> = ({label, sub, y, index, active}) => {
+  const on = active >= index;
+  const current = active === index;
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: 100,
+        right: 100,
+        top: y,
+        height: 160,
+        borderRadius: 30,
+        background: current
+          ? 'linear-gradient(120deg, rgba(7,92,255,.34), rgba(18,184,255,.14))'
+          : 'rgba(7,20,51,.78)',
+        border: `1px solid ${on ? 'rgba(18,184,255,.48)' : 'rgba(100,130,190,.16)'}`,
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 28px',
+        gap: 22,
+        transform: `scale(${current ? 1.035 : 1})`,
+        boxShadow: current ? '0 0 42px rgba(0,95,255,.22)' : 'none',
+      }}
+    >
+      <div
+        style={{
+          width: 70,
+          height: 70,
+          borderRadius: 22,
+          background: on ? C.blue : 'rgba(255,255,255,.06)',
+          color: 'white',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(90deg, #0758FF, #0FA9FF)',
-          color: WHITE,
-          fontSize: 41,
           fontWeight: 950,
-          letterSpacing: -1,
-          opacity: cta,
-          transform: `scale(${0.88 + cta * 0.12})`,
-          boxShadow: `0 0 ${48 + glow * 40}px rgba(0,123,255,${0.3 + glow * 0.18}), 0 36px 90px rgba(0,0,0,.4)`,
+          fontSize: 26,
         }}
       >
-        CLIQUE E FALE COM O AGENTE →
+        {String(index + 1).padStart(2, '0')}
       </div>
+      <div>
+        <div style={{color: C.white, fontSize: 36, fontWeight: 950}}>{label}</div>
+        <div style={{color: C.muted, fontSize: 24, marginTop: 5}}>{sub}</div>
+      </div>
+      <div style={{marginLeft: 'auto', color: on ? C.cyan : 'rgba(255,255,255,.2)', fontSize: 34, fontWeight: 900}}>
+        {on ? '✓' : '—'}
+      </div>
+    </div>
+  );
+};
 
+const Flow: React.FC = () => {
+  const frame = useCurrentFrame();
+  const p = ease(local(frame, 390, 410));
+  const active = Math.max(0, Math.min(4, Math.floor((frame - 420) / 38)));
+  const lineProgress = clamp((frame - 420) / 190);
+  return (
+    <AbsoluteFill style={{fontFamily: 'Inter, Arial, sans-serif'}}>
+      <div style={{position: 'absolute', top: 84, left: 72, right: 72, opacity: p, transform: `translateY(${(1-p)*34}px)`}}>
+        <Kicker>O que muda na prática</Kicker>
+        <div style={{color: C.white, fontSize: 63, fontWeight: 950, lineHeight: 0.98, letterSpacing: -2.5}}>
+          ELA NÃO SÓ RESPONDE.
+          <br />
+          <span style={{color: C.cyan}}>ELA SEGUE O CAMINHO.</span>
+        </div>
+      </div>
       <div
         style={{
           position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 155,
-          textAlign: 'center',
-          color: '#6F87B0',
-          fontSize: 21,
-          fontWeight: 700,
-          letterSpacing: 4,
+          left: 132,
+          top: 520,
+          width: 5,
+          height: 760,
+          background: 'rgba(255,255,255,.06)',
+          borderRadius: 10,
         }}
       >
-        KORAX · OPERAÇÃO COMERCIAL INTELIGENTE
+        <div
+          style={{
+            width: '100%',
+            height: `${lineProgress * 100}%`,
+            background: `linear-gradient(180deg, ${C.cyan}, ${C.blue})`,
+            borderRadius: 10,
+            boxShadow: '0 0 20px rgba(18,184,255,.5)',
+          }}
+        />
       </div>
-    </div>
+      <FlowNode label="MANTÉM O CONTEXTO" sub="Entende o que já foi dito." y={460} index={0} active={active} />
+      <FlowNode label="SEGUE O PROCESSO" sub="Não pula etapas do seu comercial." y={650} index={1} active={active} />
+      <FlowNode label="QUALIFICA" sub="Identifica intenção e oportunidade." y={840} index={2} active={active} />
+      <FlowNode label="AGENDA" sub="Conduz para o próximo passo." y={1030} index={3} active={active} />
+      <FlowNode label="CHAMA O HUMANO" sub="Só quando realmente precisa." y={1220} index={4} active={active} />
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 110,
+          left: 100,
+          right: 100,
+          padding: '24px 28px',
+          borderRadius: 24,
+          background: 'rgba(37,211,102,.08)',
+          border: '1px solid rgba(37,211,102,.26)',
+          color: '#bfffd5',
+          fontSize: 28,
+          fontWeight: 800,
+          textAlign: 'center',
+          opacity: ease(local(frame, 585, 610)),
+        }}
+      >
+        A IA continua o processo. Sua equipe entra só na hora certa.
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+const Closing: React.FC = () => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const p1 = ease(local(frame, 620, 645));
+  const p2 = ease(local(frame, 665, 695));
+  const logo = spring({frame: frame - 720, fps, config: {damping: 13, stiffness: 125}});
+  const cta = ease(local(frame, 742, 772));
+  return (
+    <AbsoluteFill style={{fontFamily: 'Inter, Arial, sans-serif', padding: '0 64px', justifyContent: 'center'}}>
+      <div style={{opacity: p1, transform: `translateY(${(1-p1)*70}px)`}}>
+        <Kicker>Seu atendimento pode ser automático</Kicker>
+        <div style={{color: C.white, fontSize: 73, lineHeight: 0.94, fontWeight: 950, letterSpacing: -3.5}}>
+          SEM PERDER
+          <br />
+          <span style={{color: C.cyan}}>O CONTROLE</span>
+          <br />
+          COMERCIAL.
+        </div>
+      </div>
+      <div
+        style={{
+          marginTop: 50,
+          opacity: p2,
+          transform: `translateX(${(1-p2)*80}px)`,
+          color: C.muted,
+          fontSize: 34,
+          lineHeight: 1.2,
+          fontWeight: 650,
+        }}
+      >
+        IA no WhatsApp que trabalha do seu jeito,
+        <br />
+        e não obriga sua empresa a trabalhar do jeito dela.
+      </div>
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 155,
+          left: 64,
+          right: 64,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 24,
+          opacity: clamp(logo),
+          transform: `translateY(${(1-clamp(logo))*70}px)`,
+        }}
+      >
+        <Img src={KORAX_LOGO_DATA_URL} style={{width: 122, height: 122, filter: 'drop-shadow(0 0 22px rgba(0,100,255,.6))'}} />
+        <div style={{flex: 1}}>
+          <div style={{color: C.white, fontSize: 54, fontWeight: 950, letterSpacing: 4}}>KORAX</div>
+          <div style={{color: C.muted, fontSize: 23, marginTop: 2}}>OPERAÇÃO COMERCIAL INTELIGENTE</div>
+        </div>
+        <div
+          style={{
+            width: 240,
+            height: 76,
+            borderRadius: 20,
+            background: `linear-gradient(90deg, ${C.blue}, ${C.cyan})`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            fontSize: 26,
+            fontWeight: 900,
+            opacity: cta,
+            transform: `scale(${0.85 + cta * 0.15})`,
+            boxShadow: '0 0 35px rgba(7,92,255,.35)',
+          }}
+        >
+          CONHEÇA AGORA
+        </div>
+      </div>
+    </AbsoluteFill>
   );
 };
 
 export const KoraxAd: React.FC = () => {
+  const frame = useCurrentFrame();
   return (
-    <AbsoluteFill
-      style={{
-        fontFamily: 'Arial, Helvetica, sans-serif',
-        color: WHITE,
-        backgroundColor: NAVY,
-      }}
-    >
+    <AbsoluteFill style={{background: C.bg}}>
       <Background />
-      <SceneOne />
-      <SceneTwo />
-      <SceneThree />
-      <SceneFour />
-      <SceneFive />
+      {frame < 105 && <Hook />}
+      {frame >= 90 && frame < 230 && <Pain />}
+      {frame >= 220 && frame < 318 && <Reframe />}
+      {frame >= 308 && frame < 390 && <Reveal />}
+      {frame >= 380 && frame < 625 && <Flow />}
+      {frame >= 610 && <Closing />}
     </AbsoluteFill>
   );
 };

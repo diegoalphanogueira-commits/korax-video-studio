@@ -7,7 +7,7 @@ export const RemotionRoot: React.FC = () => {
     <Composition
       id="KoraxAd"
       component={KoraxAd}
-      durationInFrames={450}
+      durationInFrames={825}
       fps={30}
       width={1080}
       height={1920}
