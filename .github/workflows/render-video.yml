@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'src/**'
+      - 'scripts/**'
       - 'package.json'
       - 'tsconfig.json'
       - '.github/workflows/render-video.yml'
@@ -13,7 +14,7 @@ on:
 jobs:
   render:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
 
     steps:
       - name: Checkout
@@ -24,16 +25,72 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
-      - name: Render MP4
+      - name: Install dependencies
+        run: |
+          npm install
+          python -m pip install --upgrade pip
+          python -m pip install numpy edge-tts
+
+      - name: Render base animation
         run: npm run render
 
-      - name: Upload rendered video
+      - name: Slow animation to premium pacing
+        run: |
+          ffmpeg -y -i out/korax-ad.mp4 \
+            -vf "setpts=1.22*PTS" -an -r 30 \
+            -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p \
+            out/korax-ad-slow.mp4
+
+      - name: Build premium sound design
+        run: python scripts/build_soundbed.py
+
+      - name: Generate natural Brazilian narration
+        run: |
+          python -m edge_tts \
+            --voice pt-BR-AntonioNeural \
+            --rate=+18% \
+            --pitch=-4Hz \
+            --text "Seu WhatsApp não para? Conheça a Kórax. A inteligência artificial que atende, qualifica e agenda seus clientes vinte e quatro horas por dia. Menos tempo no WhatsApp. Mais oportunidades para o seu negócio. Kórax. Mais respostas. Mais agendamentos. Mais vendas." \
+            --write-media out/voice-raw.mp3
+
+          ffmpeg -y -i out/voice-raw.mp3 \
+            -af "atempo=1.04,highpass=f=90,lowpass=f=9500,acompressor=threshold=0.09:ratio=3:attack=10:release=160,volume=1.35,adelay=350|350,afade=t=out:st=17.55:d=0.65,apad,atrim=0:18.3" \
+            out/voice.wav
+
+      - name: Mix narration with music and sound effects
+        run: |
+          ffmpeg -y \
+            -i out/soundbed.wav \
+            -i out/voice.wav \
+            -filter_complex "[0:a]volume=0.78[music];[1:a]volume=1.0[voice];[music][voice]sidechaincompress=threshold=0.035:ratio=7:attack=10:release=260[ducked];[ducked][voice]amix=inputs=2:normalize=0,alimiter=limit=0.94,afade=t=out:st=17.85:d=0.45[aout]" \
+            -map "[aout]" -c:a pcm_s16le out/final-audio.wav
+
+      - name: Assemble final MP4
+        run: |
+          ffmpeg -y \
+            -i out/korax-ad-slow.mp4 \
+            -i out/final-audio.wav \
+            -map 0:v:0 -map 1:a:0 \
+            -c:v copy -c:a aac -b:a 256k \
+            -t 18.3 -movflags +faststart \
+            out/korax-ad-final.mp4
+
+          ffprobe -v error \
+            -show_entries format=duration:stream=codec_type,width,height,r_frame_rate \
+            -of default=noprint_wrappers=1 \
+            out/korax-ad-final.mp4
+
+      - name: Upload final video
         uses: actions/upload-artifact@v4
         with:
-          name: korax-ad-mp4
-          path: out/korax-ad.mp4
+          name: korax-final-ptbr
+          path: |
+            out/korax-ad-final.mp4
+            out/voice-raw.mp3
           if-no-files-found: error
           retention-days: 14
