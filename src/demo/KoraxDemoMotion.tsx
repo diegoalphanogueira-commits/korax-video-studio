@@ -20,7 +20,7 @@ const Reveal: React.FC<{children: React.ReactNode; start: number; y?: number; fo
   return <div style={{overflow: 'hidden', paddingBottom: 8, marginTop: y}}><div style={{transform: `translateY(${(1-p)*120}%)`, fontSize, fontWeight: 700, color, lineHeight: 1, letterSpacing: -fontSize*.045, textAlign: align}}>{children}</div></div>;
 };
 
-export const KoraxDemoMotion: React.FC<{video: DemoVideo}> = ({video}) => {
+export const KoraxDemoMotion: React.FC<{video: DemoVideo; muted?: boolean}> = ({video, muted = false}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t=frame/fps;
@@ -50,7 +50,7 @@ export const KoraxDemoMotion: React.FC<{video: DemoVideo}> = ({video}) => {
       <span style={{fontWeight:700,fontSize:28,letterSpacing:4}}>KORAX</span>
     </div>
     <div style={{position:'absolute',left:x,top:y,width:w,height:h,overflow:'hidden',borderRadius:radius,transform:`perspective(1800px) rotateY(${rotate}deg) rotateZ(${rotate*.45}deg)`,boxShadow:'0 40px 100px rgba(0,0,0,.48)',border:t>5?'1px solid rgba(170,195,255,.22)':'none',zIndex:3}}>
-      <OffthreadVideo src={staticFile(video.src)} style={{width:'100%',height:'100%',objectFit:'cover',transform:`scale(${t<5?zoom:1.03})`,transformOrigin:'50% 35%'}} />
+      <OffthreadVideo muted={muted} src={staticFile(video.src)} style={{width:'100%',height:'100%',objectFit:'cover',transform:`scale(${t<5?zoom:1.03})`,transformOrigin:'50% 35%'}} />
       <AbsoluteFill style={{background:'linear-gradient(180deg, transparent 45%, rgba(1,11,54,.15) 63%, rgba(1,11,54,.86) 100%)'}} />
     </div>
     <div style={{position:'absolute',left:66,right:66,top:1260,zIndex:4,opacity:hook}}>

@@ -51,10 +51,19 @@ Direção visual da demonstração: azul-marinho `#010B36`, azul `#0057FF`, font
 
 A composição `KoraxDemoStyle` contém o primeiro tratamento da abertura e legendas da gravação. Para renderizar os primeiros 17,733 segundos: `npm run render:style:preview`.
 
-O [plano de edição](docs/plano-edicao-demo.md) descreve os trechos efetivamente gravados e as telas reais necessárias. Esta é uma prévia de estilo; a demonstração completa depende desses assets e da revisão das legendas.
+O [plano de edição](docs/plano-edicao-demo.md) descreve os trechos efetivamente gravados e as telas reais necessárias. A composição completa agora integra as cinco imagens recebidas; veja o mapa e as instruções de renderização.
 
 ## Prévia com motion design
 
 A composição `KoraxDemoMotion` é a amostra atual da abertura (17,733s). Ela alterna entre apresentador em tela cheia, quadro flutuante, apresentação lateral, revelação da marca e transformação gráfica de WhatsApp em operação comercial. Os movimentos seguem o áudio original e não simulam interfaces do produto.
 
 Renderize com `npm run render:motion:preview`. O arquivo é gerado em `out/korax-demo-motion-preview.mp4`.
+
+## Demonstração completa com telas — V3
+
+`KoraxDemoComplete` edita a gravação inteira de 2min45,7s em 1080 × 1920. Integra conversas, CRM, follow-up, agenda e respostas rápidas com zooms, destaques, tipografia animada e legendas. O áudio original é contínuo. A IA aparece em um fluxo gráfico e os dispositivos em ilustrações com a marca.
+
+- Vídeo completo: `npm run render:complete`.
+- Prévia de 54,5s: `npm run render:complete:preview`.
+
+As imagens originais recebidas estão em `public/telas`, sem recompressão. Coloque a gravação em `public/video/diego-korax-original.mp4` antes de renderizar; o MP4 bruto não vai para o repositório público.

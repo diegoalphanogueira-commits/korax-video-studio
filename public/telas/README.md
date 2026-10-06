@@ -1,3 +1,5 @@
-Telas reais da KORAX: screenshots PNG/JPG ou gravações curtas MP4/MOV.
+# Telas recebidas para a demonstração KORAX
 
-A lista final será definida após analisar a fala gravada. Exemplos: conversas, setores, transferência, ficha do cliente, CRM, follow-up, agenda, treinamento e conversa com IA.
+Imagens originais fornecidas pelo usuário, 1448 × 1086, preservadas sem recompressão: conversas, CRM, follow-up, agenda e respostas rápidas. As imagens têm o produto dentro de mockups de notebook e cartões visuais sobrepostos.
+
+`KoraxDemoComplete` usa os arquivos `.webp` diretamente e anima o enquadramento por coordenadas. Os destaques são editoriais; não são gravações de cliques ou alterações de estado.
