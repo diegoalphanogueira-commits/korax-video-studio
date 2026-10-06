@@ -2,6 +2,7 @@ import React from 'react';
 import {Composition} from 'remotion';
 import {KoraxAd} from './KoraxAd';
 import {KoraxDemo, DemoVideo} from './demo/KoraxDemo';
+import {KoraxDemoStyle} from './demo/KoraxDemoStyle';
 import videoConfig from './demo/video.json';
 
 const demoVideo = videoConfig as DemoVideo | null;
@@ -17,6 +18,7 @@ export const RemotionRoot: React.FC = () => (
       height={1920}
     />
     {demoVideo && (
+      <>
       <Composition
         id="KoraxDemo"
         component={KoraxDemo}
@@ -26,6 +28,16 @@ export const RemotionRoot: React.FC = () => (
         height={demoVideo.height}
         defaultProps={{video: demoVideo}}
       />
+      <Composition
+        id="KoraxDemoStyle"
+        component={KoraxDemoStyle}
+        durationInFrames={demoVideo.durationInFrames}
+        fps={demoVideo.fps}
+        width={1080}
+        height={1920}
+        defaultProps={{video: demoVideo}}
+      />
+      </>
     )}
   </>
 );

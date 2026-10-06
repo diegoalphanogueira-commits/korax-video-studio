@@ -46,3 +46,9 @@ A preparação identifica duração, FPS, resolução e orientação. A composi�
 Validação do código: `npm run typecheck`. A composição e o workflow anteriores continuam disponíveis. O workflow existente renderiza apenas `KoraxAd`; a nova demonstração é renderizada pelo comando específico acima.
 
 Direção visual da demonstração: azul-marinho `#010B36`, azul `#0057FF`, fonte Inter, motion clean e telas reais. O próximo passo é analisar a fala efetivamente gravada e criar o mapa da edição, antes de sincronizar legendas e inserir telas.
+
+## Prévia de estilo da gravação recebida
+
+A composição `KoraxDemoStyle` contém o primeiro tratamento da abertura e legendas da gravação. Para renderizar os primeiros 17,733 segundos: `npm run render:style:preview`.
+
+O [plano de edição](docs/plano-edicao-demo.md) descreve os trechos efetivamente gravados e as telas reais necessárias. Esta é uma prévia de estilo; a demonstração completa depende desses assets e da revisão das legendas.
