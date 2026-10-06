@@ -10,7 +10,8 @@
     "prepare:demo": "node scripts/prepare-demo.mjs",
     "render:demo": "remotion render src/index.ts KoraxDemo out/korax-demo-final.mp4 --codec=h264 --crf=18",
     "render:demo:preview": "remotion render src/index.ts KoraxDemo out/korax-demo-preview.mp4 --codec=h264 --crf=28 --scale=0.5",
-    "render:style:preview": "remotion render src/index.ts KoraxDemoStyle out/korax-demo-style-preview.mp4 --frames=0-531 --codec=h264 --crf=20 --scale=0.5 --concurrency=2"
+    "render:style:preview": "remotion render src/index.ts KoraxDemoStyle out/korax-demo-style-preview.mp4 --frames=0-531 --codec=h264 --crf=20 --scale=0.5 --concurrency=2",
+    "render:motion:preview": "remotion render src/index.ts KoraxDemoMotion out/korax-demo-motion-preview.mp4 --codec=h264 --crf=18 --scale=0.5 --concurrency=2"
   },
   "dependencies": {
     "@fontsource/inter": "5.2.8",

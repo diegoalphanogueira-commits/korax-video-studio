@@ -4,9 +4,9 @@ Arquivo recebido: 165,733 segundos (2min45,7s), vertical 512 × 910, 30 fps, áu
 
 A gravação é a referência da edição. O roteiro escrito contém trechos que foram removidos no corte, portanto não deve ser usado para inventar legendas ou cenas.
 
-## Primeira prévia
+## Prévia atual com motion design
 
-`KoraxDemoStyle` aplica a identidade visual, Inter local, zoom suave, identificação de Diego, destaques curtos e legendas sincronizadas. A prévia contém 532 frames (17,733s), encerrando depois de “acompanhável e inteligente”. O áudio é o da gravação. O projeto usa canvas 1080 × 1920; a prévia é exportada em 540 × 960 para revisão.
+`KoraxDemoMotion` aplica a identidade visual e Inter local, com mudanças de composição, palavras entrando por máscara, apresentador em quadros animados com perspectiva, apresentação lateral, revelação da marca e transformação gráfica de WhatsApp em operação comercial. As legendas e os movimentos seguem os tempos da gravação. `KoraxDemoStyle` permanece disponível como alternativa simples. A prévia contém 532 frames (17,733s), encerrando depois de “acompanhável e inteligente”. O áudio é o da gravação. O projeto usa canvas 1080 × 1920; a prévia é exportada em 540 × 960 para revisão.
 
 Esta etapa valida o estilo da abertura. Ainda não contém as telas reais da KORAX nem a edição visual completa dos demais trechos. As legendas foram geradas por reconhecimento de fala e receberam correções dos principais termos; revisar auditivamente a versão completa antes de publicação.
 
@@ -46,4 +46,4 @@ Mantenha capturas desktop no formato original em alta resolução. Para o trecho
 
 Adicione o original em `public/video/diego-korax-original.mp4`, execute `npm ci` e `npm run studio`. Se o vídeo for substituído por outra exportação, execute `npm run prepare:demo` e revise a sincronização das legendas. Não faça commit do MP4 bruto no repositório público.
 
-`npm run render:style:preview` gera a prévia em `out/korax-demo-style-preview.mp4`. O teste neste chat precisou de um ajuste temporário da detecção de interfaces de rede, específico do ambiente; esse ajuste não faz parte do projeto.
+`npm run render:motion:preview` gera a prévia atual em `out/korax-demo-motion-preview.mp4`. O teste neste chat precisou de um ajuste temporário da detecção de interfaces de rede, específico do ambiente; esse ajuste não faz parte do projeto.
