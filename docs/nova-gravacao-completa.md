@@ -68,7 +68,7 @@ A geração é determinística. O MP3 em `public/music/korax-trilha-original.mp3
 
 ```sh
 python3 scripts/create-korax-score.py --work-dir out/music-work
-python3 scripts/mix-motion-sounds.py out/korax-completo-1080p.mp4 out/korax-completo-trilha-e-efeitos-1080p.mp4 --work-dir out/music-work --music out/music-work/korax-original-score.wav
+python3 scripts/mix-motion-sounds.py out/korax-completo-1080p.mp4 out/korax-completo-trilha-e-efeitos-1080p.mp4 --work-dir out/music-work --music out/music-work/korax-original-score.wav --drums out/music-work/korax-drums.wav
 ```
 
 A mixagem parte da fala original, reaplica os efeitos uma única vez e soma a trilha com volume automático governado pela voz. O convite final recebe uma subida de 12% na música. A imagem segue copiada sem recompressão e com comparação dos hashes dos pacotes de vídeo.
@@ -76,3 +76,9 @@ A mixagem parte da fala original, reaplica os efeitos uma única vez e soma a tr
 ### Revisão — bateria leve e progressiva
 
 Mantida a abertura suave. A bateria começa aos 10s e cresce gradualmente até 30s: bumbo macio, caixa escovada, marcação curta e shaker com leve swing. O pulso fica mais definido no restante do vídeo, com pequenas variações e redução no encerramento. Os acordes recuam um pouco na entrada da bateria, dando espaço ao ritmo. Mantidos 96 BPM, automação sob a voz, effects e vídeo sem recompressão.
+
+### Revisão seguinte — bateria perceptível e groove de rock atmosférico
+
+O feedback foi que a bateria anterior não estava audível. A percussão agora é um stem separado, com volume independente da base harmônica. Entram bumbo com corpo e harmônico, caixa com esteira e chimbal em colcheias; groove relaxado de rock em 4/4, pequenas variações de tempo e viradas discretas. A entrada começa aos 7,5s. A base de teclado recua, e a bateria sofre menos redução durante a fala. A referência de clima é rock atmosférico; nenhuma música existente é utilizada ou copiada.
+
+O gerador cria também `korax-drums.wav` e o MP3 de preview `korax-bateria-original.mp3`. Use `--drums` no export final. `drumGain.json` governa a automação separada no Remotion.

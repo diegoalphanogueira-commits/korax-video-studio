@@ -10,7 +10,9 @@ parser.add_argument('input',type=Path,help='Approved video with original voice o
 parser.add_argument('output',type=Path)
 parser.add_argument('--work-dir',type=Path,required=True)
 parser.add_argument('--music',type=Path,help='Optional original instrumental bed')
+parser.add_argument('--drums',type=Path,help='Separate audible drum groove')
 args=parser.parse_args()
+if args.drums and not args.music:parser.error('--drums requires --music')
 if args.output.exists():
     raise SystemExit('Output exists: inspect before replacing it.')
 root=Path(__file__).resolve().parents[1]
@@ -48,7 +50,7 @@ if args.music:
     music_duck=.38+.62*(1-np.clip(speech/.075,0,1))
     times=np.arange(length)/rate
     lift=1+.12*np.clip((times-270)/2,0,1)
-    music_gain=.21*music_duck*lift
+    music_gain=(.17 if args.drums else .21)*music_duck*lift
     music*=music_gain[:,None]
     mix+=music
     wavfile.write(args.work_dir/'music-ducked.wav',rate,music.astype(np.float32))
@@ -56,6 +58,19 @@ if args.music:
     automation=[round(float(music_gain[i]),4) for i in range(0,length,round(rate/5))]
     (root/'src/demo/musicGain.json').write_text(json.dumps(automation)+'\n')
     music_report={'originalInstrumental':True,'bpm':96,'ducking':True,'musicRmsDbFS':float(20*np.log10(np.sqrt(np.mean(music**2)))),'musicPeakDbFS':float(20*np.log10(np.max(np.abs(music))))}
+if args.drums:
+    drum_raw=subprocess.check_output(['ffmpeg','-v','error','-i',str(args.drums),'-f','f32le','-ar',str(rate),'-ac','2','-'])
+    drum=np.frombuffer(drum_raw,dtype='<f4').reshape(-1,2)[:length].copy()
+    if len(drum)<length:drum=np.pad(drum,((0,length-len(drum)),(0,0)))
+    drum_gain=.42*(.72+.28*(1-np.clip(speech/.075,0,1)))
+    drum_gain*=1+.08*np.clip((times-270)/2,0,1)
+    drum*=drum_gain[:,None]
+    mix+=drum
+    wavfile.write(args.work_dir/'drums-mixed.wav',rate,drum.astype(np.float32))
+    (root/'src/demo/drumGain.json').write_text(json.dumps([round(float(drum_gain[i]),4) for i in range(0,length,round(rate/5))])+'\n')
+    music_report['drumsRmsDbFS']=float(20*np.log10(np.sqrt(np.mean(drum**2))))
+    music_report['drumsPeakDbFS']=float(20*np.log10(np.max(np.abs(drum))))
+    music_report['separateDrumMix']=True
 mix_path=args.work_dir/'motion-mix.wav'
 wavfile.write(mix_path,rate,mix.astype(np.float32))
 wavfile.write(args.work_dir/'motion-effects-only.wav',rate,effects.astype(np.float32))
