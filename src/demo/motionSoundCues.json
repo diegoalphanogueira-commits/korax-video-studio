@@ -1,0 +1,1115 @@
+[
+  {
+    "time": 0.06666666666666667,
+    "sound": "whoosh-soft",
+    "volume": 0.0805,
+    "duration": 0.42,
+    "reason": "Opening title"
+  },
+  {
+    "time": 1.9666666666666666,
+    "sound": "accent-soft",
+    "volume": 0.11,
+    "duration": 0.3,
+    "reason": "WhatsApp emphasis"
+  },
+  {
+    "time": 2.966666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Opening service chip"
+  },
+  {
+    "time": 3.8333333333333335,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Opening service chip"
+  },
+  {
+    "time": 4.666666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Opening service chip"
+  },
+  {
+    "time": 6.266666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Opening service chip"
+  },
+  {
+    "time": 6.966666666666667,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Presenter moves into large portrait"
+  },
+  {
+    "time": 8.966666666666667,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Portrait becomes circle"
+  },
+  {
+    "time": 10.666666666666666,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "More demand"
+  },
+  {
+    "time": 11.066666666666666,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "WhatsApp hub"
+  },
+  {
+    "time": 13.266666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Acquisition source card"
+  },
+  {
+    "time": 14.466666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Acquisition source card"
+  },
+  {
+    "time": 15.566666666666666,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Acquisition source card"
+  },
+  {
+    "time": 16.566666666666666,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Three problems transition"
+  },
+  {
+    "time": 16.9,
+    "sound": "accent-soft",
+    "volume": 0.088,
+    "duration": 0.3,
+    "reason": "Number three"
+  },
+  {
+    "time": 17.266666666666666,
+    "sound": "click-soft",
+    "volume": 0.0562,
+    "duration": 0.072,
+    "reason": "Problem number card"
+  },
+  {
+    "time": 17.466666666666665,
+    "sound": "click-soft",
+    "volume": 0.0562,
+    "duration": 0.072,
+    "reason": "Problem number card"
+  },
+  {
+    "time": 17.666666666666668,
+    "sound": "click-soft",
+    "volume": 0.0562,
+    "duration": 0.072,
+    "reason": "Problem number card"
+  },
+  {
+    "time": 18.966666666666665,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "First problem transition"
+  },
+  {
+    "time": 21.066666666666666,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Illustrative chat card"
+  },
+  {
+    "time": 23.266666666666666,
+    "sound": "click-soft",
+    "volume": 0.06,
+    "duration": 0.072,
+    "reason": "Interest decline emphasis"
+  },
+  {
+    "time": 26,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene scattered transition"
+  },
+  {
+    "time": 26.266666666666666,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Scattered attendant card"
+  },
+  {
+    "time": 27.666666666666668,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Scattered attendant card"
+  },
+  {
+    "time": 29.066666666666666,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Scattered attendant card"
+  },
+  {
+    "time": 34.43333333333333,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene forgotten transition"
+  },
+  {
+    "time": 35.1,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Quotation bubble"
+  },
+  {
+    "time": 43.166666666666664,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene process transition"
+  },
+  {
+    "time": 47.266666666666666,
+    "sound": "accent-soft",
+    "volume": 0.11,
+    "duration": 0.3,
+    "reason": "Process emphasis"
+  },
+  {
+    "time": 49.166666666666664,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene brand transition"
+  },
+  {
+    "time": 49.63333333333333,
+    "sound": "accent-soft",
+    "volume": 0.11,
+    "duration": 0.3,
+    "reason": "Korax reveal"
+  },
+  {
+    "time": 52.9,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene entry transition"
+  },
+  {
+    "time": 53.36666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "WhatsApp card"
+  },
+  {
+    "time": 57.266666666666666,
+    "sound": "whoosh-soft",
+    "volume": 0.0805,
+    "duration": 0.42,
+    "reason": "WhatsApp to operation connection"
+  },
+  {
+    "time": 57.56666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Korax operation card"
+  },
+  {
+    "time": 60.93333333333333,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene ai transition"
+  },
+  {
+    "time": 61.53333333333333,
+    "sound": "accent-soft",
+    "volume": 0.088,
+    "duration": 0.3,
+    "reason": "Digital employee reveal"
+  },
+  {
+    "time": 64.83333333333333,
+    "sound": "click-soft",
+    "volume": 0.06,
+    "duration": 0.072,
+    "reason": "Knowledge and action emphasis"
+  },
+  {
+    "time": 66.9,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene training transition"
+  },
+  {
+    "time": 67.46666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 68.8,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 70.16666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 72.43333333333334,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene skills transition"
+  },
+  {
+    "time": 72.7,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 75.26666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 76.2,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 77.7,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 81.56666666666666,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene contrast transition"
+  },
+  {
+    "time": 82.03333333333333,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Generic response card"
+  },
+  {
+    "time": 82.53333333333333,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Objective and context card"
+  },
+  {
+    "time": 85.16666666666667,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene training transition"
+  },
+  {
+    "time": 85.76666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 87.46666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 89.16666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 90.86666666666666,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 93.9,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene handoff transition"
+  },
+  {
+    "time": 94.46666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Digital employee"
+  },
+  {
+    "time": 95.36666666666666,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Human attendant"
+  },
+  {
+    "time": 98.06666666666666,
+    "sound": "whoosh-soft",
+    "volume": 0.0805,
+    "duration": 0.42,
+    "reason": "Handoff connection"
+  },
+  {
+    "time": 100.36666666666666,
+    "sound": "confirm-soft",
+    "volume": 0.085,
+    "duration": 0.34,
+    "reason": "Context reaches the team"
+  },
+  {
+    "time": 102.76666666666667,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene context transition"
+  },
+  {
+    "time": 106.5,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 108.6,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 109.73333333333333,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 111.33333333333333,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 113.53333333333333,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene team transition"
+  },
+  {
+    "time": 113.9,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Connected operation node"
+  },
+  {
+    "time": 114.16666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Connected operation node"
+  },
+  {
+    "time": 114.4,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Connected operation node"
+  },
+  {
+    "time": 115.03333333333333,
+    "sound": "accent-soft",
+    "volume": 0.0825,
+    "duration": 0.3,
+    "reason": "Korax hub"
+  },
+  {
+    "time": 118.36666666666666,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene screen transition"
+  },
+  {
+    "time": 118.8,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Real product screen entry"
+  },
+  {
+    "time": 120.1,
+    "sound": "whoosh-soft",
+    "volume": 0.0633,
+    "duration": 0.42,
+    "reason": "Product screen zoom"
+  },
+  {
+    "time": 126.13333333333334,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene context transition"
+  },
+  {
+    "time": 126.7,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 127.9,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 129.13333333333333,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 130.33333333333334,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 132.46666666666667,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene screen transition"
+  },
+  {
+    "time": 132.9,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Real product screen entry"
+  },
+  {
+    "time": 134.2,
+    "sound": "whoosh-soft",
+    "volume": 0.0633,
+    "duration": 0.42,
+    "reason": "Product screen zoom"
+  },
+  {
+    "time": 137.66666666666666,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene organized transition"
+  },
+  {
+    "time": 138.03333333333333,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Connected operation node"
+  },
+  {
+    "time": 138.3,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Connected operation node"
+  },
+  {
+    "time": 138.53333333333333,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Connected operation node"
+  },
+  {
+    "time": 139.16666666666666,
+    "sound": "accent-soft",
+    "volume": 0.0825,
+    "duration": 0.3,
+    "reason": "Korax hub"
+  },
+  {
+    "time": 145.26666666666668,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene follow transition"
+  },
+  {
+    "time": 145.83333333333334,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Quotation request"
+  },
+  {
+    "time": 152.36666666666667,
+    "sound": "click-soft",
+    "volume": 0.06,
+    "duration": 0.072,
+    "reason": "Follow-up emphasis"
+  },
+  {
+    "time": 153.6,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene schedule transition"
+  },
+  {
+    "time": 156.56666666666666,
+    "sound": "click-soft",
+    "volume": 0.075,
+    "duration": 0.072,
+    "reason": "Return schedule card"
+  },
+  {
+    "time": 157.3,
+    "sound": "click-soft",
+    "volume": 0.075,
+    "duration": 0.072,
+    "reason": "Return schedule card"
+  },
+  {
+    "time": 158.5,
+    "sound": "click-soft",
+    "volume": 0.075,
+    "duration": 0.072,
+    "reason": "Return schedule card"
+  },
+  {
+    "time": 159.2,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene screen transition"
+  },
+  {
+    "time": 159.63333333333333,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Real product screen entry"
+  },
+  {
+    "time": 160.93333333333334,
+    "sound": "whoosh-soft",
+    "volume": 0.0633,
+    "duration": 0.42,
+    "reason": "Product screen zoom"
+  },
+  {
+    "time": 165.8,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene auto transition"
+  },
+  {
+    "time": 166.26666666666668,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Automatic return flow"
+  },
+  {
+    "time": 169.2,
+    "sound": "click-soft",
+    "volume": 0.075,
+    "duration": 0.072,
+    "reason": "Illustrative return message"
+  },
+  {
+    "time": 173.96666666666667,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene screen transition"
+  },
+  {
+    "time": 174.4,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Real product screen entry"
+  },
+  {
+    "time": 175.7,
+    "sound": "whoosh-soft",
+    "volume": 0.0633,
+    "duration": 0.42,
+    "reason": "Product screen zoom"
+  },
+  {
+    "time": 178.36666666666667,
+    "sound": "whoosh-swipe",
+    "volume": 0.0683,
+    "duration": 0.52,
+    "reason": "Scene journey transition"
+  },
+  {
+    "time": 179.86666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Journey hub"
+  },
+  {
+    "time": 180.83333333333334,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene journey transition"
+  },
+  {
+    "time": 181.1,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Customer journey step"
+  },
+  {
+    "time": 182.63333333333333,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Customer journey step"
+  },
+  {
+    "time": 185.16666666666666,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Customer journey step"
+  },
+  {
+    "time": 187.46666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Customer journey step"
+  },
+  {
+    "time": 190.1,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene journey transition"
+  },
+  {
+    "time": 190.36666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Customer journey step"
+  },
+  {
+    "time": 192.73333333333332,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Customer journey step"
+  },
+  {
+    "time": 195.3,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Customer journey step"
+  },
+  {
+    "time": 199.23333333333332,
+    "sound": "whoosh-soft",
+    "volume": 0.0748,
+    "duration": 0.42,
+    "reason": "Scene team transition"
+  },
+  {
+    "time": 199.6,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Connected operation node"
+  },
+  {
+    "time": 199.86666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Connected operation node"
+  },
+  {
+    "time": 200.1,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Connected operation node"
+  },
+  {
+    "time": 200.73333333333332,
+    "sound": "accent-soft",
+    "volume": 0.0825,
+    "duration": 0.3,
+    "reason": "Korax hub"
+  },
+  {
+    "time": 201.03333333333333,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene devices transition"
+  },
+  {
+    "time": 205.1,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Device entry"
+  },
+  {
+    "time": 206,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Device entry"
+  },
+  {
+    "time": 206.56666666666666,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Device entry"
+  },
+  {
+    "time": 210.5,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene partner transition"
+  },
+  {
+    "time": 211.06666666666666,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Company and Korax team"
+  },
+  {
+    "time": 212.26666666666668,
+    "sound": "click-soft",
+    "volume": 0.06,
+    "duration": 0.072,
+    "reason": "Implementation stages"
+  },
+  {
+    "time": 219.63333333333333,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene diagnosis transition"
+  },
+  {
+    "time": 220.2,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 221.9,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 223.6,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 225.3,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 230.26666666666668,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene setup transition"
+  },
+  {
+    "time": 230.63333333333333,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Connected operation node"
+  },
+  {
+    "time": 230.9,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Connected operation node"
+  },
+  {
+    "time": 231.13333333333333,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Connected operation node"
+  },
+  {
+    "time": 231.76666666666668,
+    "sound": "accent-soft",
+    "volume": 0.0825,
+    "duration": 0.3,
+    "reason": "Korax hub"
+  },
+  {
+    "time": 234.43333333333334,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene training transition"
+  },
+  {
+    "time": 235,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 236.46666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 237.93333333333334,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 239.4,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Information card"
+  },
+  {
+    "time": 241.8,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene enablement transition"
+  },
+  {
+    "time": 242.36666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Team training card"
+  },
+  {
+    "time": 243.46666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Team training card"
+  },
+  {
+    "time": 244.56666666666666,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Team training card"
+  },
+  {
+    "time": 246.63333333333333,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene partner transition"
+  },
+  {
+    "time": 247.2,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Company and Korax team"
+  },
+  {
+    "time": 248.4,
+    "sound": "click-soft",
+    "volume": 0.06,
+    "duration": 0.072,
+    "reason": "Implementation stages"
+  },
+  {
+    "time": 251.36666666666667,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene closing transition"
+  },
+  {
+    "time": 251.96666666666667,
+    "sound": "accent-soft",
+    "volume": 0.0715,
+    "duration": 0.3,
+    "reason": "Closing emphasis"
+  },
+  {
+    "time": 255.96666666666667,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene organized transition"
+  },
+  {
+    "time": 256.3666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Connected operation node"
+  },
+  {
+    "time": 256.6,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Connected operation node"
+  },
+  {
+    "time": 256.8666666666667,
+    "sound": "pop-soft",
+    "volume": 0.095,
+    "duration": 0.17,
+    "reason": "Connected operation node"
+  },
+  {
+    "time": 257.46666666666664,
+    "sound": "accent-soft",
+    "volume": 0.0825,
+    "duration": 0.3,
+    "reason": "Korax hub"
+  },
+  {
+    "time": 263.23333333333335,
+    "sound": "whoosh-soft",
+    "volume": 0.115,
+    "duration": 0.42,
+    "reason": "Scene closing transition"
+  },
+  {
+    "time": 263.8,
+    "sound": "accent-soft",
+    "volume": 0.0715,
+    "duration": 0.3,
+    "reason": "Closing emphasis"
+  },
+  {
+    "time": 270.3333333333333,
+    "sound": "whoosh-swipe",
+    "volume": 0.105,
+    "duration": 0.52,
+    "reason": "Scene cta transition"
+  },
+  {
+    "time": 270.8,
+    "sound": "confirm-soft",
+    "volume": 0.085,
+    "duration": 0.34,
+    "reason": "Schedule a demonstration button"
+  },
+  {
+    "time": 281.8333333333333,
+    "sound": "click-soft",
+    "volume": 0.0562,
+    "duration": 0.072,
+    "reason": "Contact instruction"
+  }
+]

@@ -43,3 +43,19 @@ ffmpeg -i out/korax-completo-render.mp4 -i public/video/diego-korax-novo.mp4 -ma
 ```
 
 O áudio final é copiado do original sem nova compressão. O vídeo original e as composições anteriores permanecem intactos.
+
+## Revisão de áudio — efeitos de movimento
+
+A versão com efeitos usa 159 cues sincronizados a 30 fps: swishes nas transições e mudanças de enquadramento, pops nos cards, cliques nos destaques e acentos suaves nas entradas principais e no CTA. Não há efeito para cada palavra da legenda.
+
+Os seis efeitos em `public/sfx` são sons originais sintetizados pelo script `scripts/create-motion-sounds.py`; nenhum áudio foi extraído da referência. `motionSoundCues.json` governa tanto o componente `MotionSoundEffects` quanto a mixagem final. `prepare-motion-cues.cjs` regenera o mapa a partir dos tempos da montagem.
+
+Na entrega com efeitos, a fala original é decodificada e somada aos efeitos; os efeitos recuam automaticamente durante a fala. Um limitador com compensação de latência segura os picos. O áudio é exportado em AAC a 256 kbps. Os pacotes de vídeo são copiados e verificados como idênticos: não há nova compressão da imagem.
+
+```sh
+python3 scripts/create-motion-sounds.py
+node scripts/prepare-motion-cues.cjs
+python3 scripts/mix-motion-sounds.py out/korax-completo-1080p.mp4 out/korax-completo-com-efeitos-1080p.mp4 --work-dir out/audio-work
+```
+
+A entrada da mixagem deve ser a versão com fala original e sem efeitos; não remixar uma exportação já sonorizada. A prévia visual aprovada permanece igual.
