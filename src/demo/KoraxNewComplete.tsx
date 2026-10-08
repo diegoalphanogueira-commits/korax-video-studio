@@ -7,6 +7,7 @@ import {KoraxReferenceSample} from './KoraxReferenceSample';
 import captions from './newFullCaptions.json';
 import {MotionSoundEffects} from './MotionSoundEffects';
 import {BackgroundMusic} from './BackgroundMusic';
+import headWindows from './headBreakoutWindows.json';
 
 const B='#0057FF', N='#010B36', P='#A7C8FF';
 const clamp={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
@@ -155,24 +156,31 @@ const backgroundMix=(t:number)=>{
  return previous;
 };
 
-export const KoraxNewComplete:React.FC=()=>{
- const t=useCurrentFrame()/30,p=presenterPlacement(t),mix=backgroundMix(t);
+export const KoraxNewComplete:React.FC<{mutedExport?:boolean}>=({mutedExport=false})=>{
+ const frame=useCurrentFrame(),t=frame/30,base=presenterPlacement(t),mix=backgroundMix(t);
+ const headWindow=headWindows.find(w=>frame>=w.startFrame&&frame<=w.endFrame);
+ const headMix=headWindow?Math.min(headWindow.startFrame===0?1:r(t,headWindow.startFrame/30,headWindow.startFrame/30+.6),headWindow.endFrame===8614?1:r(t,(headWindow.endFrame+1)/30-.6,(headWindow.endFrame+1)/30,1,0)):0;
+ const breakout:Placement={x:220,y:760,w:640,h:frame<210?980:760,radius:44,scale:1.45,sourceTop:-230};
+ const p={} as Placement;
+ for(const key of Object.keys(base) as (keyof Placement)[])p[key]=base[key]+(breakout[key]-base[key])*headMix;
  const dark=mix>.5;
  const cap=captions.find(c=>t>=c.start&&t<c.end);
  return <AbsoluteFill style={{background:'#F8FAFF',color:interpolateColors(mix,[0,1],[N,'#FFFFFF']),fontFamily:'Inter,Arial,sans-serif',overflow:'hidden'}}>
-  <Audio src={staticFile('video/diego-korax-novo.mp4')}/>
-  <MotionSoundEffects/>
-  <BackgroundMusic/>
+  {!mutedExport&&<><Audio src={staticFile('video/diego-korax-novo.mp4')}/><MotionSoundEffects/><BackgroundMusic/></>}
   <AbsoluteFill style={{background:'radial-gradient(ellipse at 60% 60%,#DCE9FF66,transparent 65%)'}}/>
   <AbsoluteFill style={{background:'radial-gradient(ellipse at 80% 0%,#12479688,transparent 65%),linear-gradient(165deg,#010B36,#020718)',opacity:mix}}/>
   <div style={{position:'absolute',left:-490,top:620,width:1100,height:1100,borderRadius:'50%',border:'1px solid #568AFF18',transform:`translate(${30*Math.sin(t*.3)}px,${20*Math.cos(t*.24)}px)`}}/>
   <div style={{position:'absolute',left:64,top:85,display:'flex',alignItems:'center',gap:15}}><Img src={KORAX_LOGO_DATA_URL} style={{width:44,height:44}}/><span style={{fontSize:27,fontWeight:700,letterSpacing:4}}>KORAX</span></div>
   {t<26.24&&<AbsoluteFill style={{opacity:r(t,25.76,26.24,1,0)}}><KoraxReferenceSample graphicsOnly/></AbsoluteFill>}
   {fullScenes.filter(s=>t>=s.start-.24&&t<s.end+.24).map(s=><AbsoluteFill key={s.start} style={{opacity:fade(t,s.start,s.end),color:s.dark?'white':N}}><Title s={s} t={t}/>{s.pose!=='portrait'&&<Visual s={s} t={t}/>}</AbsoluteFill>)}
-  {/* This is the only video element. Never unmounted, faded, stretched or covered by wipes. */}
+  {/* Continuous original video: only its frame changes shape and placement. */}
   <div data-presenter='continuous' style={{position:'absolute',left:p.x,top:p.y,width:p.w,height:p.h,borderRadius:p.radius,overflow:'hidden',border:`2px solid ${dark?'#76AAFF99':'#0057FF55'}`,boxShadow:dark?'0 20px 85px #0008':'0 25px 70px #0B368B30',background:N,zIndex:20}}>
    <OffthreadVideo muted src={staticFile('video/diego-korax-novo.mp4')} style={{position:'absolute',left:(p.w-512*p.scale)/2,top:p.sourceTop,width:512,height:910,transform:`scale(${p.scale})`,transformOrigin:'0 0'}}/>
   </div>
+  {headWindow&&headMix>0&&<AbsoluteFill style={{zIndex:21,opacity:headMix,clipPath:`inset(0 0 ${1920-p.y-100}px 0)`}}>
+   <Img src={staticFile(`video/diego-recorte-completo-frames/${String(headWindow.alphaOffset+frame-headWindow.startFrame+1).padStart(4,'0')}.png`)}
+    style={{position:'absolute',left:p.x+2+(p.w-512*p.scale)/2,top:p.y+2+p.sourceTop,width:512,height:910,transform:`scale(${p.scale})`,transformOrigin:'0 0'}}/>
+  </AbsoluteFill>}
   {fullScenes.filter(s=>s.pose==='portrait'&&t>=s.start-.24&&t<s.end+.24).map(s=><AbsoluteFill key={s.start} style={{opacity:fade(t,s.start,s.end),color:s.dark?'white':N,zIndex:22}}><Visual s={s} t={t}/></AbsoluteFill>)}
   {t>=26&&cap&&<div style={{position:'absolute',left:55,right:55,bottom:100,textAlign:'center',zIndex:30,fontSize:49,fontWeight:700,lineHeight:1.25,textShadow:dark?'0 3px 12px #0009':'none'}}><span style={{display:'inline-block',maxWidth:935,background:dark?'#010B36E8':'#F8FAFFF2',borderRadius:16,padding:'15px 23px'}}>{cap.words.map((word,i)=><span key={i} style={{color:t>=word.start&&t<word.end?dark?'#83B5FF':B:dark?'white':N}}>{word.word.trim()}{i<cap.words.length-1?' ':''}</span>)}</span></div>}
   {t>=26&&<div style={{position:'absolute',left:65,right:65,bottom:49,height:3,background:dark?'#6F9FEB22':'#0057FF18',zIndex:30}}><div style={{height:3,background:B,width:`${100*t/287.166667}%`}}/></div>}

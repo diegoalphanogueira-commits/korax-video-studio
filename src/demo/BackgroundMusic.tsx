@@ -1,7 +1,6 @@
 import React from 'react';
 import {Audio, staticFile} from 'remotion';
 import gain from './musicGain.json';
-import drumGain from './drumGain.json';
 
 const volume=(frame:number,values:number[])=>{
  const position=frame/30*5;
@@ -11,5 +10,4 @@ const volume=(frame:number,values:number[])=>{
 };
 export const BackgroundMusic:React.FC=()=> <>
  <Audio src={staticFile('music/korax-trilha-original.mp3')} volume={frame=>volume(frame,gain)}/>
- <Audio src={staticFile('music/korax-bateria-original.mp3')} volume={frame=>volume(frame,drumGain)}/>
 </>;

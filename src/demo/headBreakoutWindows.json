@@ -1,0 +1,27 @@
+[
+  {
+    "startFrame": 0,
+    "endFrame": 204,
+    "alphaOffset": 0
+  },
+  {
+    "startFrame": 1478,
+    "endFrame": 1589,
+    "alphaOffset": 208
+  },
+  {
+    "startFrame": 7544,
+    "endFrame": 7684,
+    "alphaOffset": 344
+  },
+  {
+    "startFrame": 7899,
+    "endFrame": 8111,
+    "alphaOffset": 505
+  },
+  {
+    "startFrame": 8400,
+    "endFrame": 8614,
+    "alphaOffset": 739
+  }
+]

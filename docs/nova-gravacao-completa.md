@@ -82,3 +82,36 @@ Mantida a abertura suave. A bateria começa aos 10s e cresce gradualmente até 3
 O feedback foi que a bateria anterior não estava audível. A percussão agora é um stem separado, com volume independente da base harmônica. Entram bumbo com corpo e harmônico, caixa com esteira e chimbal em colcheias; groove relaxado de rock em 4/4, pequenas variações de tempo e viradas discretas. A entrada começa aos 7,5s. A base de teclado recua, e a bateria sofre menos redução durante a fala. A referência de clima é rock atmosférico; nenhuma música existente é utilizada ou copiada.
 
 O gerador cria também `korax-drums.wav` e o MP3 de preview `korax-bateria-original.mp3`. Use `--drums` no export final. `drumGain.json` governa a automação separada no Remotion.
+
+### Revisão — recorte alternado e retirada somente da bateria
+
+O recorte aprovado de cabeça acima do cartão aparece em cinco janelas:
+abertura, apresentação da marca, duas falas do encerramento e convite final.
+`headBreakoutWindows.json` determina os frames e seus índices no alfa. A camada
+original permanece contínua, com escala uniforme; a cabeça compartilha as
+mesmas coordenadas e atravessa apenas a borda superior. A entrada e saída do
+efeito levam 0,6s, sem apagar a imagem do apresentador.
+
+`scripts/prepare-full-head-cutout.py` combina a máscara acompanhada com os pixels
+da gravação original, fecha pequenos furos e recupera cabelo perdido na virada
+da cabeça. O alfa externo `diego-recortes-alpha-31s.webm` contém 954 frames dos
+cinco trechos de origem, com durações e deslocamentos registrados no script.
+
+A bateria foi retirada subtraindo `drums-mixed.wav` do mix anterior, antes do
+mesmo limitador. A fala, os 159 efeitos e a base harmônica automatizada mantêm
+os mesmos níveis. `BackgroundMusic.tsx` agora toca somente a base harmônica.
+
+O export renderiza apenas os intervalos que contêm mudanças, delimitados por
+keyframes do vídeo aprovado: frames 0–215, 1478–1589, 7544–7684, 7899–8111 e
+8362–8614. Os demais pacotes de vídeo são copiados sem recompressão. A junção
+deve conter exatamente 8615 frames a 30 fps, em 1080 × 1920. `mutedExport`
+permite renderizar a imagem separadamente, aplicando a mixagem única no final.
+
+```sh
+python3 scripts/remove-korax-drum-stem.py out/music-work/motion-mix.wav out/music-work/drums-mixed.wav out/music-work/motion-mix-sem-bateria.wav
+python3 scripts/prepare-full-head-cutout.py public/video/diego-korax-novo.mp4 public/video/diego-recortes-alpha-31s.webm
+python3 scripts/export-head-breakout-full.py out/korax-completo-trilha-e-efeitos-1080p.mp4 out/music-work/motion-mix-sem-bateria.wav out/korax-completo-recorte-sem-bateria-1080p.mp4 --work-dir out/head-work
+```
+
+O preparo grava os PNGs de forma atômica e valida os 954 arquivos antes do
+export. Use `--repair` para reconstruir apenas PNGs ausentes ou incompletos.
