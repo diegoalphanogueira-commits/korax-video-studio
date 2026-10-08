@@ -59,3 +59,16 @@ python3 scripts/mix-motion-sounds.py out/korax-completo-1080p.mp4 out/korax-comp
 ```
 
 A entrada da mixagem deve ser a versão com fala original e sem efeitos; não remixar uma exportação já sonorizada. A prévia visual aprovada permanece igual.
+
+## Trilha instrumental original
+
+`scripts/create-korax-score.py` compõe uma trilha original de 287,166667s a 96 BPM: pads suaves, acordes estendidos, arpejos discretos e percussão leve. Não há vocais nem amostras de músicas existentes. A composição varia a textura entre os blocos, recua na implantação e cresce discretamente no CTA; entrada e encerramento têm fades.
+
+A geração é determinística. O MP3 em `public/music/korax-trilha-original.mp3` é um asset de build ignorado pelo git: gere-o antes de abrir ou renderizar a composição. O código da composição e a automação de volume em `musicGain.json` estão versionados. A entrega final usa o WAV original para evitar uma etapa de compressão intermediária na trilha.
+
+```sh
+python3 scripts/create-korax-score.py --work-dir out/music-work
+python3 scripts/mix-motion-sounds.py out/korax-completo-1080p.mp4 out/korax-completo-trilha-e-efeitos-1080p.mp4 --work-dir out/music-work --music out/music-work/korax-original-score.wav
+```
+
+A mixagem parte da fala original, reaplica os efeitos uma única vez e soma a trilha com volume automático governado pela voz. O convite final recebe uma subida de 12% na música. A imagem segue copiada sem recompressão e com comparação dos hashes dos pacotes de vídeo.

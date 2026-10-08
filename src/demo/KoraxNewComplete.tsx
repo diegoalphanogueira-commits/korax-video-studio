@@ -6,6 +6,7 @@ import {KORAX_LOGO_DATA_URL} from '../logoData';
 import {KoraxReferenceSample} from './KoraxReferenceSample';
 import captions from './newFullCaptions.json';
 import {MotionSoundEffects} from './MotionSoundEffects';
+import {BackgroundMusic} from './BackgroundMusic';
 
 const B='#0057FF', N='#010B36', P='#A7C8FF';
 const clamp={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
@@ -161,6 +162,7 @@ export const KoraxNewComplete:React.FC=()=>{
  return <AbsoluteFill style={{background:'#F8FAFF',color:interpolateColors(mix,[0,1],[N,'#FFFFFF']),fontFamily:'Inter,Arial,sans-serif',overflow:'hidden'}}>
   <Audio src={staticFile('video/diego-korax-novo.mp4')}/>
   <MotionSoundEffects/>
+  <BackgroundMusic/>
   <AbsoluteFill style={{background:'radial-gradient(ellipse at 60% 60%,#DCE9FF66,transparent 65%)'}}/>
   <AbsoluteFill style={{background:'radial-gradient(ellipse at 80% 0%,#12479688,transparent 65%),linear-gradient(165deg,#010B36,#020718)',opacity:mix}}/>
   <div style={{position:'absolute',left:-490,top:620,width:1100,height:1100,borderRadius:'50%',border:'1px solid #568AFF18',transform:`translate(${30*Math.sin(t*.3)}px,${20*Math.cos(t*.24)}px)`}}/>

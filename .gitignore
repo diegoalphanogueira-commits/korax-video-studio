@@ -6,3 +6,4 @@ out/
 # Mídia bruta fica disponível localmente; evita commits de arquivos grandes.
 public/video/*
 !public/video/README.md
+public/music/*.mp3

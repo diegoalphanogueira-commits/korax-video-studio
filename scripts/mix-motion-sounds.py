@@ -9,6 +9,7 @@ parser=argparse.ArgumentParser()
 parser.add_argument('input',type=Path,help='Approved video with original voice only')
 parser.add_argument('output',type=Path)
 parser.add_argument('--work-dir',type=Path,required=True)
+parser.add_argument('--music',type=Path,help='Optional original instrumental bed')
 args=parser.parse_args()
 if args.output.exists():
     raise SystemExit('Output exists: inspect before replacing it.')
@@ -37,6 +38,24 @@ rms=np.sqrt(uniform_filter1d(np.mean(voice**2,axis=1),round(.06*rate),mode='near
 duck=.52+.48*(1-np.clip(rms/.075,0,1))
 effects*=duck[:,None]
 mix=voice+effects
+music_report=None
+if args.music:
+    music_raw=subprocess.check_output(['ffmpeg','-v','error','-i',str(args.music),'-f','f32le','-ar',str(rate),'-ac','2','-'])
+    music=np.frombuffer(music_raw,dtype='<f4').reshape(-1,2)[:length].copy()
+    if len(music)<length:music=np.pad(music,((0,length-len(music)),(0,0)))
+    # Lower the bed during narration; a gentle lift only at the final invitation.
+    speech=np.sqrt(uniform_filter1d(np.mean(voice**2,axis=1),round(.22*rate),mode='nearest'))
+    music_duck=.38+.62*(1-np.clip(speech/.075,0,1))
+    times=np.arange(length)/rate
+    lift=1+.12*np.clip((times-270)/2,0,1)
+    music_gain=.21*music_duck*lift
+    music*=music_gain[:,None]
+    mix+=music
+    wavfile.write(args.work_dir/'music-ducked.wav',rate,music.astype(np.float32))
+    # Reusable 5 Hz gain automation for the Remotion preview.
+    automation=[round(float(music_gain[i]),4) for i in range(0,length,round(rate/5))]
+    (root/'src/demo/musicGain.json').write_text(json.dumps(automation)+'\n')
+    music_report={'originalInstrumental':True,'bpm':96,'ducking':True,'musicRmsDbFS':float(20*np.log10(np.sqrt(np.mean(music**2)))),'musicPeakDbFS':float(20*np.log10(np.max(np.abs(music))))}
 mix_path=args.work_dir/'motion-mix.wav'
 wavfile.write(mix_path,rate,mix.astype(np.float32))
 wavfile.write(args.work_dir/'motion-effects-only.wav',rate,effects.astype(np.float32))
@@ -54,5 +73,6 @@ decoded=np.frombuffer(subprocess.check_output(['ffmpeg','-v','error','-i',str(ar
 peak=float(np.max(np.abs(decoded)))
 assert peak<1.001,'Clipping after AAC export'
 report={'status':'verified','cues':len(cues),'videoBitIdentical':True,'frames':8615,'audioRate':rate,'audioBitrate':'256k AAC','peakDbFS':float(20*np.log10(max(peak,1e-12))),'effectsPeakDbFS':float(20*np.log10(np.max(np.abs(effects)))),'voiceRmsDbFS':float(20*np.log10(np.sqrt(np.mean(voice**2)))),'duration':probe['format']['duration'],'sizeBytes':int(probe['format']['size'])}
+if music_report:report['music']=music_report
 (args.work_dir/'motion-audio-verification.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps(report),flush=True)
