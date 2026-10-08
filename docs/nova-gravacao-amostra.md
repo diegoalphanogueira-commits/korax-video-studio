@@ -26,3 +26,11 @@ O protagonista permanece filmado dentro de máscaras; esta amostra não inclui r
 `npx remotion render src/index.ts KoraxReferenceSample out/korax-amostra-motion-referencia-26s.mp4 --codec=h264 --crf=18 --concurrency=3`
 
 As composições e os arquivos da demonstração anterior não foram substituídos. A continuação depende da validação visual da amostra de 26s.
+
+## Revisão V2 — continuidade solicitada por Diego
+
+O protagonista deve permanecer visível em toda a amostra, inclusive durante as mudanças de cena. Foram removidas as máscaras opacas que cobriam a tela inteira. O fundo agora muda por mistura gradual; os conteúdos anterior e seguinte se sobrepõem brevemente enquanto o rosto se reposiciona.
+
+A janela horizontal pequena do trecho final foi substituída por um círculo de 440px no canvas 1080p. O círculo superior passou de 250px para 340px. A imagem de origem é desenhada sempre em 512 × 910 e redimensionada uniformemente; posição e escala do recorte são interpoladas, sem alternar abruptamente entre `object-fit`/crops incompatíveis.
+
+Uma única instância contínua do vídeo tem prioridade de camada sobre os fundos e gráficos. O rosto não recebe animação de opacidade nem sai da tela. A revisão mantém os mesmos 26 segundos e o áudio original. Conferir especialmente as passagens próximas a 7,2s, 9,22s, 16,82s e 19,22s.
