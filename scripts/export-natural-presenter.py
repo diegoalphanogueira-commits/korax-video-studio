@@ -31,7 +31,10 @@ if not silent.exists():
         if not path.exists():
             run(['npx','remotion','render','src/index.ts','KoraxNewComplete',str(path),
                  f'--frames={start}-{end}','--codec=h264','--crf=17','--image-format=jpeg',
-                 '--jpeg-quality=100','--concurrency=2','--props={"mutedExport":true}'],
+                 '--jpeg-quality=100','--concurrency=2',
+                 '--offthreadvideo-cache-size-in-bytes=268435456',
+                 '--media-cache-size-in-bytes=134217728','--timeout=120000',
+                 '--props={"mutedExport":true}'],
                  work/f'render-{index}.log')
         v=next(s for s in probe(path)['streams'] if s['codec_name']=='h264')
         assert int(v['nb_frames'])==end-start+1
