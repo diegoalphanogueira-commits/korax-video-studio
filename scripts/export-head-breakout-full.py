@@ -1,7 +1,8 @@
 """Render changed intervals, preserve other video packets, and mux the drum-free mix."""
 import argparse
 import json
-import os
+import re
+from fractions import Fraction
 from pathlib import Path
 import subprocess
 
@@ -42,6 +43,12 @@ for i,(start,end) in enumerate(zip(boundaries,boundaries[1:])):
                  f'--frames={start}-{end-1}','--codec=h264','--crf=18','--concurrency=3',
                  '--props={"mutedExport":true}'],work/f'render-{i:02d}.log')
         assert int(probe(part)[0]['nb_frames'])==end-start
+    # The segment muxer and renderer can choose different time bases.
+    # Normalize every part by remuxing, without touching encoded pictures.
+    normalized=work/f'normalized-{i:02d}.mp4'
+    run(['ffmpeg','-y','-v','error','-i',str(part),'-map','0:v:0','-c:v','copy',
+         '-video_track_timescale','90000',str(normalized)])
+    part=normalized
     parts.append(part)
 manifest=work/'concat.txt'
 manifest.write_text(''.join(f"file '{p}'\n" for p in parts))
@@ -58,12 +65,14 @@ run(['ffmpeg','-y','-v','error','-i',str(joined),'-i',str(mix),'-map','0:v:0',
 streams=probe(output); video=next(s for s in streams if s['codec_name']=='h264')
 audio=next(s for s in streams if s['codec_name']=='aac')
 assert int(video['nb_frames'])==8615 and abs(float(audio['duration'])-8615/30)<.025
-# Check every untouched compressed packet, indexed by display frame.
+# Check untouched encoded pictures; concatenation can insert SPS/PPS metadata.
 def packets(path):
-    data=json.loads(subprocess.check_output(['ffprobe','-v','error','-select_streams','v:0',
-                    '-show_packets','-show_data_hash','sha256','-show_entries',
-                    'packet=pts_time,data_hash','-of','json',str(path)]))['packets']
-    return {round(float(p['pts_time'])*30):p['data_hash'] for p in data}
+    data=subprocess.check_output(['ffmpeg','-v','error','-i',str(path),'-map','0:v:0',
+         '-c:v','copy','-bsf:v','filter_units=remove_types=6|7|8|9',
+         '-f','framehash','-hash','sha256','-'],text=True)
+    time_base=Fraction(re.search(r'#tb 0: (\S+)',data).group(1))
+    rows=[line.split(',') for line in data.splitlines() if line and not line.startswith('#')]
+    return {round(int(row[2])*time_base*30):row[-1].strip() for row in rows}
 before=packets(approved);after=packets(output)
 preserved=0
 for i,(start,end) in enumerate(zip(boundaries,boundaries[1:])):

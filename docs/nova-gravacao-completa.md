@@ -103,7 +103,7 @@ os mesmos níveis. `BackgroundMusic.tsx` agora toca somente a base harmônica.
 
 O export renderiza apenas os intervalos que contêm mudanças, delimitados por
 keyframes do vídeo aprovado: frames 0–215, 1478–1589, 7544–7684, 7899–8111 e
-8362–8614. Os demais pacotes de vídeo são copiados sem recompressão. A junção
+8362–8614. Os demais quadros codificados são copiados sem recompressão. A junção
 deve conter exatamente 8615 frames a 30 fps, em 1080 × 1920. `mutedExport`
 permite renderizar a imagem separadamente, aplicando a mixagem única no final.
 
@@ -115,3 +115,7 @@ python3 scripts/export-head-breakout-full.py out/korax-completo-trilha-e-efeitos
 
 O preparo grava os PNGs de forma atômica e valida os 954 arquivos antes do
 export. Use `--repair` para reconstruir apenas PNGs ausentes ou incompletos.
+
+Todos os segmentos usam a mesma base de tempo (1/90000) antes da junção. A
+verificação compara os hashes dos quadros H.264 codificados nos 7680 frames
+preservados, excluindo somente metadados SEI/SPS/PPS/AUD inseridos na junção.
