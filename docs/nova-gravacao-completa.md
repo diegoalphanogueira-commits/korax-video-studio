@@ -72,3 +72,7 @@ python3 scripts/mix-motion-sounds.py out/korax-completo-1080p.mp4 out/korax-comp
 ```
 
 A mixagem parte da fala original, reaplica os efeitos uma única vez e soma a trilha com volume automático governado pela voz. O convite final recebe uma subida de 12% na música. A imagem segue copiada sem recompressão e com comparação dos hashes dos pacotes de vídeo.
+
+### Revisão — bateria leve e progressiva
+
+Mantida a abertura suave. A bateria começa aos 10s e cresce gradualmente até 30s: bumbo macio, caixa escovada, marcação curta e shaker com leve swing. O pulso fica mais definido no restante do vídeo, com pequenas variações e redução no encerramento. Os acordes recuam um pouco na entrada da bateria, dando espaço ao ritmo. Mantidos 96 BPM, automação sob a voz, effects e vídeo sem recompressão.

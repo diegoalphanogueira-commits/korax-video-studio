@@ -53,12 +53,18 @@ t=np.arange(round(.055*RATE))/RATE
 shaker=sosfilt(butter(2,[3500,7500],btype='bandpass',fs=RATE,output='sos'),rng.normal(size=len(t)))*np.sin(np.pi*t/.055)**2
 t=np.arange(round(.065*RATE))/RATE
 rim=(np.sin(2*np.pi*430*t)+.25*np.sin(2*np.pi*820*t))*(1-np.exp(-t/.001))*np.exp(-t/.010)
+t=np.arange(round(.13*RATE))/RATE
+brush=sosfilt(butter(2,[750,3200],btype='bandpass',fs=RATE,output='sos'),rng.normal(size=len(t)))
+brush*=np.exp(-t/.028)*(1-np.exp(-t/.002))
+brush/=max(float(np.max(np.abs(brush))),1e-9)
 
 # Four warm extended chords; alternate voicings and arp phrasing every 8 bars.
 for bar in range(int(np.ceil(DURATION/BAR))):
     start=bar*BAR;ci=(bar//2)%4;chord=chords[ci]
     if bar%2==0:
-        for j,note in enumerate(chord):place(start-.35,pad(note,2*BAR+1.6,j*.73+bar*.09),.042)
+        # Preserve the soft opening, then give the growing drum groove more room.
+        pad_level=.042 if bar<4 else .032
+        for j,note in enumerate(chord):place(start-.35,pad(note,2*BAR+1.6,j*.73+bar*.09),pad_level)
     section=bar//16
     if bar<4:energy=.52
     elif start>=210 and start<251:energy=.7
@@ -71,13 +77,23 @@ for bar in range(int(np.ceil(DURATION/BAR))):
         note=chord[1+pattern[step]%4]+(12 if bar%8 in [6,7] else 0)
         place(start+step*BEAT+(.025 if step%2 else 0),pluck(note),.045*energy,[-.3,.25,-.12,.32][step])
     if 4<=bar and start<282:
+        # Starts at 10s, growing over 20s; calm backbeat rather than a sudden drop.
+        progress=min(1,max(0,(start-10)/20))
+        drum_energy=energy*(.30+.70*progress)
+        kick_beats=[0,2] if bar<12 else [0,1,2,3]
+        for beat in kick_beats:
+            place(start+beat*BEAT,kick,.145*drum_energy*(1 if beat%2==0 else .56))
         for beat in [0,2]:
-            place(start+beat*BEAT,kick,.055*energy)
-            place(start+beat*BEAT+.035,bass(basses[ci]),.052*energy)
-        for beat in [1,3]:place(start+beat*BEAT,rim,.018*energy,.08)
+            place(start+beat*BEAT+.035,bass(basses[ci]),.062*energy)
+        if bar>=12 and bar%4==3:place(start+3.5*BEAT,kick,.038*drum_energy)
+        for beat in [1,3]:
+            place(start+beat*BEAT+.012,rim,.036*drum_energy,.08)
+            if bar>=6:place(start+beat*BEAT+.014,brush,.042*drum_energy,.02)
         for step in range(8):
-            if section%3==1 and step%2==0:continue
-            place(start+step*BEAT/2+.008,shaker,.012*energy*(-.15 if step%2 else .15)+.012*energy,(-.3 if step%2 else .3))
+            if bar<8 and step%2==0:continue
+            swing=.022 if step%2 else 0
+            accent=.70 if step%2==0 else 1
+            place(start+step*BEAT/2+.008+swing,shaker,.027*drum_energy*accent,(-.25 if step%2 else .25))
 
 # A warm resolving chord at the end, with percussion already retreating.
 for j,note in enumerate(chords[0]):place(282.5,pad(note,4.65,j*.8),.022)
@@ -93,4 +109,4 @@ score*=.72/max(float(np.max(np.abs(score))),1e-9)
 wav=args.work_dir/'korax-original-score.wav'
 wavfile.write(wav,RATE,score)
 subprocess.run(['ffmpeg','-v','error','-y','-i',str(wav),'-c:a','libmp3lame','-b:a','192k',str(out/'korax-trilha-original.mp3')],check=True)
-print(f'Original instrumental composed: {DURATION:.3f}s, 96 BPM, stereo, no vocals.',flush=True)
+print(f'Original instrumental composed: {DURATION:.3f}s, 96 BPM, gentle progressive drums from 10s.',flush=True)
