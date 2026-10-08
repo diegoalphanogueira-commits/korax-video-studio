@@ -3,6 +3,7 @@ import argparse
 import json
 from pathlib import Path
 import subprocess
+from concurrent.futures import ThreadPoolExecutor
 
 parser=argparse.ArgumentParser()
 parser.add_argument('approved',type=Path)
@@ -23,9 +24,28 @@ def probe(path):
 silent=work/'natural-picture-muted.mp4'
 print('Rendering the complete corrected picture: 8615 frames',flush=True)
 if not silent.exists():
-    run(['npx','remotion','render','src/index.ts','KoraxNewComplete',str(silent),
-         '--codec=h264','--crf=17','--image-format=png','--concurrency=6',
-         '--props={"mutedExport":true}'],work/'render.log')
+    ranges=[(0,2871),(2872,5743),(5744,8614)]
+    def render_part(item):
+        index,(start,end)=item
+        path=work/f'natural-part-{index}.mp4'
+        if not path.exists():
+            run(['npx','remotion','render','src/index.ts','KoraxNewComplete',str(path),
+                 f'--frames={start}-{end}','--codec=h264','--crf=17','--image-format=jpeg',
+                 '--jpeg-quality=100','--concurrency=2','--props={"mutedExport":true}'],
+                 work/f'render-{index}.log')
+        v=next(s for s in probe(path)['streams'] if s['codec_name']=='h264')
+        assert int(v['nb_frames'])==end-start+1
+        normalized=work/f'natural-part-{index}-normalized.mp4'
+        run(['ffmpeg','-y','-v','error','-i',str(path),'-map','0:v:0','-c:v','copy',
+             '-video_track_timescale','90000',str(normalized)])
+        return normalized
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        parts=list(executor.map(render_part,enumerate(ranges)))
+    manifest=work/'natural-concat.txt'
+    manifest.write_text(''.join(f"file '{p}'\n" for p in parts))
+    run(['ffmpeg','-y','-v','warning','-f','concat','-safe','0','-i',str(manifest),
+         '-map','0:v:0','-c:v','copy','-video_track_timescale','90000',
+         '-movflags','+faststart',str(silent)],work/'concat.log')
 v=next(s for s in probe(silent)['streams'] if s['codec_name']=='h264')
 assert int(v['nb_frames'])==8615 and v['width']==1080 and v['height']==1920
 run(['ffmpeg','-y','-v','error','-i',str(silent),'-i',str(approved),'-map','0:v:0',
@@ -41,6 +61,6 @@ assert abs(float(a['duration'])-8615/30)<.025
 report={'status':'verified','frames':8615,'duration':8615/30,'width':1080,'height':1920,
         'audioBitIdentical':True,'drumStemPresent':False,'headBreakoutMoments':5,
         'fullTimelinePresenterTreatment':True,'colorMatchedCutout':True,
-        'losslessRenderFrames':True,'finalH264CRF':17,'sizeBytes':int(p['format']['size'])}
+        'renderFrameFormat':'JPEG','renderFrameQuality':100,'finalH264CRF':17,'sizeBytes':int(p['format']['size'])}
 (work/'export-verification.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps(report),flush=True)

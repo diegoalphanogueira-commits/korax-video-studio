@@ -130,9 +130,11 @@ pele. O arquivo tratado usa H.264 CRF 12 na resolução nativa.
 
 Os 954 quadros de cabeça recebem os pixels do mesmo vídeo tratado, mantendo
 exatamente o alfa e o contorno anteriormente aprovados. O render completo usa
-frames PNG sem perdas e export H.264 CRF 17 em 1080 × 1920, 30 fps, 8615 frames.
+frames JPEG em qualidade 100 e export H.264 CRF 17 em 1080 × 1920, 30 fps, 8615 frames.
 O áudio da versão sem bateria é copiado sem recodificação e comparado por hash.
 Todas as cenas, textos, telas, recortes e tempos seguem a edição aprovada.
+O export divide o render em três partes, normaliza todas para base de tempo
+1/90000 e as junta sem recodificar novamente a imagem.
 
 ```sh
 python3 scripts/prepare-natural-presenter.py public/video/diego-korax-novo.mp4
