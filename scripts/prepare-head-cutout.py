@@ -5,7 +5,7 @@ import subprocess
 import tempfile
 import numpy as np
 from PIL import Image
-from scipy.ndimage import binary_fill_holes
+from scipy.ndimage import binary_fill_holes, binary_closing, label
 
 parser = argparse.ArgumentParser()
 parser.add_argument('source', type=Path)
@@ -27,5 +27,17 @@ with tempfile.TemporaryDirectory() as temp:
         # Close enclosed pinholes without expanding the outside hair contour.
         alpha = np.maximum(alpha, binary_fill_holes(alpha > 128).astype('uint8')*255)
         original = Image.open(root/'original'/path.name).convert('RGBA')
+        # Recover dark hair lost by the tracker on a head turn. This source's
+        # upper wall is light; select only the connected dark hair region.
+        rgb = np.asarray(original)[:,:,:3]
+        dark = np.zeros(alpha.shape, dtype=bool)
+        dark[30:190,70:420] = rgb[30:190,70:420].max(axis=2) < 125
+        regions, _ = label(dark)
+        candidates, counts = np.unique(regions[70:150,130:350], return_counts=True)
+        valid = candidates != 0
+        if valid.any():
+            hair = regions == candidates[valid][np.argmax(counts[valid])]
+            hair = binary_fill_holes(binary_closing(hair, iterations=1))
+            alpha = np.maximum(alpha, hair.astype('uint8')*255)
         original.putalpha(Image.fromarray(alpha))
         original.save(args.output/path.name)

@@ -11,6 +11,10 @@ O segundo recorte contém transparência real. Os pixels visíveis vêm da grava
 original, usando apenas o alfa do recorte; pequenos furos internos no cabelo
 são fechados sem expandir o contorno externo.
 
+Quando o rastreador perde cabelo na virada de cabeça, o preparo recupera a
+região escura conectada do cabelo na parte superior da gravação, limitada à
+faixa acima do cartão. Essa correção é específica deste fundo claro.
+
 Materialize a gravação original e o recorte `diego-recorte-alpha-8s.webm`.
 Prepare os frames com:
 
