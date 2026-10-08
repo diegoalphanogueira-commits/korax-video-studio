@@ -9,7 +9,7 @@ O objetivo deste repositório é gerar anúncios verticais em vídeo por código
 - Composição: `KoraxAd`
 - Formato: 1080 × 1920 (9:16)
 - FPS: 30
-- Duração: 15 segundos
+- Duração atual: 27,5 segundos
 - Estilo: premium tech / azul-marinho / neon azul
 
 ## Rodar localmente
@@ -30,3 +30,40 @@ O arquivo final será criado em `out/korax-ad.mp4`.
 ## Render automático
 
 Cada push em `main` que altera o vídeo dispara o workflow **Render Korax Video**. O MP4 fica disponível como artifact da execução do GitHub Actions.
+
+## Demonstração com a gravação do Diego
+
+A composição adicional `KoraxDemo` preserva vídeo e áudio originais. É habilitada apenas depois de receber o arquivo e executar a preparação; não usa telas fictícias nem legendas estimadas.
+
+1. Disponibilize o original em `public/video/diego-korax-original.mp4`. Vídeos grandes não precisam ser commitados: podem ser entregues por upload ou link de download acessível. O repositório é público; um arquivo commitado será público.
+2. Execute `npm run prepare:demo` (requer FFmpeg/ffprobe).
+3. Execute `npm run studio` e selecione `KoraxDemo`.
+4. Adicione telas reais em `public/telas`, logo em `public/logos` e referências em `public/referencias`.
+5. Após implementar e revisar a edição, execute `npm run render:demo`. Resultado: `out/korax-demo-final.mp4`.
+
+A preparação identifica duração, FPS, resolução e orientação. A composição começa na proporção original, até definirmos a resolução de entrega a partir da gravação. O comando não sobrescreve o original.
+
+Validação do código: `npm run typecheck`. A composição e o workflow anteriores continuam disponíveis. O workflow existente renderiza apenas `KoraxAd`; a nova demonstração é renderizada pelo comando específico acima.
+
+Direção visual da demonstração: azul-marinho `#010B36`, azul `#0057FF`, fonte Inter, motion clean e telas reais. O próximo passo é analisar a fala efetivamente gravada e criar o mapa da edição, antes de sincronizar legendas e inserir telas.
+
+## Prévia de estilo da gravação recebida
+
+A composição `KoraxDemoStyle` contém o primeiro tratamento da abertura e legendas da gravação. Para renderizar os primeiros 17,733 segundos: `npm run render:style:preview`.
+
+O [plano de edição](docs/plano-edicao-demo.md) descreve os trechos efetivamente gravados e as telas reais necessárias. A composição completa agora integra as cinco imagens recebidas; veja o mapa e as instruções de renderização.
+
+## Prévia com motion design
+
+A composição `KoraxDemoMotion` é a amostra atual da abertura (17,733s). Ela alterna entre apresentador em tela cheia, quadro flutuante, apresentação lateral, revelação da marca e transformação gráfica de WhatsApp em operação comercial. Os movimentos seguem o áudio original e não simulam interfaces do produto.
+
+Renderize com `npm run render:motion:preview`. O arquivo é gerado em `out/korax-demo-motion-preview.mp4`.
+
+## Demonstração completa com telas — V3
+
+`KoraxDemoComplete` edita a gravação inteira de 2min45,7s em 1080 × 1920. Integra conversas, CRM, follow-up, agenda e respostas rápidas com zooms, destaques, tipografia animada e legendas. O áudio original é contínuo. A IA aparece em um fluxo gráfico e os dispositivos em ilustrações com a marca.
+
+- Vídeo completo: `npm run render:complete`.
+- Prévia de 54,5s: `npm run render:complete:preview`.
+
+As imagens originais recebidas estão em `public/telas`, sem recompressão. Coloque a gravação em `public/video/diego-korax-original.mp4` antes de renderizar; o MP4 bruto não vai para o repositório público.
