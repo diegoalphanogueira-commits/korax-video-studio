@@ -23,7 +23,7 @@ const Icon:React.FC<{kind:number}>=({kind})=><svg width='48' height='48' viewBox
  {kind===0?<><rect x='6' y='8' width='36' height='27' rx='7'/><path d='M16 35l-6 7v-9M15 20h18M15 27h11'/></>:kind===1?<><path d='M8 36V22m12 14V15m12 21V9M5 41h37M7 15l12-7 12 1 10-6'/></>:kind===2?<><rect x='12' y='5' width='26' height='38' rx='4'/><path d='M20 16h10M20 24h10M20 32h6'/></>:<><rect x='6' y='9' width='36' height='33' rx='6'/><path d='M6 20h36M15 5v9M33 5v9M17 30l5 5 10-10'/></>}
 </svg>;
 
-export const KoraxReferenceSample:React.FC<{graphicsOnly?:boolean}>=({graphicsOnly=false})=>{
+export const KoraxReferenceSample:React.FC<{graphicsOnly?:boolean;presenter?:React.ReactNode}>=({graphicsOnly=false,presenter})=>{
  const f=useCurrentFrame(),t=f/30;
  const phase=t<7.2?0:t<9.22?1:t<16.82?2:t<19.22?3:4;
  const dark=phase===1||phase===2||phase===4;
@@ -46,6 +46,7 @@ export const KoraxReferenceSample:React.FC<{graphicsOnly?:boolean}>=({graphicsOn
   {!graphicsOnly&&<div data-presenter='continuous' style={{position:'absolute',left:x,top:y,width:w,height:h,borderRadius:radius,overflow:'hidden',border:`2px solid ${dark?'#76AAFF99':'#0057FF55'}`,boxShadow:dark?'0 20px 85px #0008':'0 25px 70px #0B368B30',zIndex:20,background:N}}>
     <OffthreadVideo muted src={staticFile('video/diego-korax-novo.mp4')} style={{position:'absolute',left:(w-512*sourceScale)/2,top:sourceTop,width:512,height:910,transform:`scale(${sourceScale})`,transformOrigin:'0 0'}}/>
   </div>}
+  {presenter}
   {t<7.42&&<AbsoluteFill style={{opacity:fade(t,-1,7.2)}}>
    <div style={{position:'absolute',left:65,right:65,top:247,textAlign:'center'}}>
     <Pop start={.1} t={t}><div style={{fontSize:37,fontWeight:600}}>Seu atendimento começa no</div></Pop>

@@ -7,12 +7,14 @@ import {KoraxDemoMotion} from './demo/KoraxDemoMotion';
 import {KoraxDemoComplete} from './demo/KoraxDemoComplete';
 import {KoraxReferenceSample} from './demo/KoraxReferenceSample';
 import {KoraxNewComplete} from './demo/KoraxNewComplete';
+import {KoraxHeadBreakoutPreview} from './demo/KoraxHeadBreakoutPreview';
 import videoConfig from './demo/video.json';
 
 const demoVideo = videoConfig as DemoVideo | null;
 
 export const RemotionRoot: React.FC = () => (
   <>
+    <Composition id="KoraxHeadBreakoutPreview" component={KoraxHeadBreakoutPreview} durationInFrames={180} fps={30} width={1080} height={1920}/>
     <Composition id="KoraxNewComplete" component={KoraxNewComplete} durationInFrames={8615} fps={30} width={1080} height={1920}/>
     <Composition id="KoraxReferenceSample" component={KoraxReferenceSample} durationInFrames={780} fps={30} width={1080} height={1920}/>
     <Composition
