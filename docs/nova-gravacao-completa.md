@@ -119,3 +119,22 @@ export. Use `--repair` para reconstruir apenas PNGs ausentes ou incompletos.
 Todos os segmentos usam a mesma base de tempo (1/90000) antes da junção. A
 verificação compara os hashes dos quadros H.264 codificados nos 7680 frames
 preservados, excluindo somente metadados SEI/SPS/PPS/AUD inseridos na junção.
+
+### Revisão — cor e iluminação naturais do apresentador no vídeo inteiro
+
+`scripts/prepare-natural-presenter.py` trata a gravação original de ponta a
+ponta: vermelho 0,96, verde 1,015, azul 1,07; exposição +0,006, contraste 1,025,
+gamma 1,06, saturação 0,98 e definição suave 0,24. O ajuste reduz a dominante
+amarela e abre um pouco as sombras. Não há geração de rosto nem suavização de
+pele. O arquivo tratado usa H.264 CRF 12 na resolução nativa.
+
+Os 954 quadros de cabeça recebem os pixels do mesmo vídeo tratado, mantendo
+exatamente o alfa e o contorno anteriormente aprovados. O render completo usa
+frames PNG sem perdas e export H.264 CRF 17 em 1080 × 1920, 30 fps, 8615 frames.
+O áudio da versão sem bateria é copiado sem recodificação e comparado por hash.
+Todas as cenas, textos, telas, recortes e tempos seguem a edição aprovada.
+
+```sh
+python3 scripts/prepare-natural-presenter.py public/video/diego-korax-novo.mp4
+python3 scripts/export-natural-presenter.py out/korax-completo-recorte-sem-bateria-1080p.mp4 out/korax-completo-imagem-natural-1080p.mp4 --work-dir out/color-natural-work
+```

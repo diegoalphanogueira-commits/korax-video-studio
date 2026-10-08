@@ -175,10 +175,10 @@ export const KoraxNewComplete:React.FC<{mutedExport?:boolean}>=({mutedExport=fal
   {fullScenes.filter(s=>t>=s.start-.24&&t<s.end+.24).map(s=><AbsoluteFill key={s.start} style={{opacity:fade(t,s.start,s.end),color:s.dark?'white':N}}><Title s={s} t={t}/>{s.pose!=='portrait'&&<Visual s={s} t={t}/>}</AbsoluteFill>)}
   {/* Continuous original video: only its frame changes shape and placement. */}
   <div data-presenter='continuous' style={{position:'absolute',left:p.x,top:p.y,width:p.w,height:p.h,borderRadius:p.radius,overflow:'hidden',border:`2px solid ${dark?'#76AAFF99':'#0057FF55'}`,boxShadow:dark?'0 20px 85px #0008':'0 25px 70px #0B368B30',background:N,zIndex:20}}>
-   <OffthreadVideo muted src={staticFile('video/diego-korax-novo.mp4')} style={{position:'absolute',left:(p.w-512*p.scale)/2,top:p.sourceTop,width:512,height:910,transform:`scale(${p.scale})`,transformOrigin:'0 0'}}/>
+   <OffthreadVideo muted src={staticFile('video/diego-korax-cor-natural.mp4')} style={{position:'absolute',left:(p.w-512*p.scale)/2,top:p.sourceTop,width:512,height:910,transform:`scale(${p.scale})`,transformOrigin:'0 0'}}/>
   </div>
   {headWindow&&headMix>0&&<AbsoluteFill style={{zIndex:21,opacity:headMix,clipPath:`inset(0 0 ${1920-p.y-100}px 0)`}}>
-   <Img src={staticFile(`video/diego-recorte-completo-frames/${String(headWindow.alphaOffset+frame-headWindow.startFrame+1).padStart(4,'0')}.png`)}
+   <Img src={staticFile(`video/diego-recorte-cor-natural-frames/${String(headWindow.alphaOffset+frame-headWindow.startFrame+1).padStart(4,'0')}.png`)}
     style={{position:'absolute',left:p.x+2+(p.w-512*p.scale)/2,top:p.y+2+p.sourceTop,width:512,height:910,transform:`scale(${p.scale})`,transformOrigin:'0 0'}}/>
   </AbsoluteFill>}
   {fullScenes.filter(s=>s.pose==='portrait'&&t>=s.start-.24&&t<s.end+.24).map(s=><AbsoluteFill key={s.start} style={{opacity:fade(t,s.start,s.end),color:s.dark?'white':N,zIndex:22}}><Visual s={s} t={t}/></AbsoluteFill>)}
